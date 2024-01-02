@@ -14,7 +14,7 @@
 
     <?php
     include 'db.php';  // Make sure this file initializes the $conn variable
-
+    session_start();
     function refreshPage() {
        // header("Refresh:5");  // This will refresh the page after 0 seconds
     }
@@ -119,8 +119,9 @@
             $air_conditioning = $_POST['air_conditioning'];
             $coffee_maker = $_POST['coffee_maker'];
             $status = $_POST['status'];
+            $user_id = $_SESSION['user_id'];
     
-            $addQuery = "INSERT INTO rooms (start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status) VALUES ('$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status')";
+            $addQuery = "INSERT INTO rooms (start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status,fk_Administratorid_User ) VALUES ('$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status','$user_id')";
     
             if ($conn->query($addQuery) === TRUE) {
                 echo "New room added successfully.";
