@@ -5,8 +5,6 @@ $userid = $_SESSION['user_id'];
 
 include 'db.php'; // Database connection file
 
-
-
 // Fetch list of customers
 $sql = "SELECT id_User, CONCAT(id_User, '-', firstname) AS display_name FROM Customers";
 $result = $conn->query($sql);
@@ -24,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date_generated = $_POST['date_generated'];
     $customer_id = $_POST['customer_id']; // Updated field name
     $employee_id = $userid;
- 
 
     // Perform any necessary data validation here...
 
@@ -38,9 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-} else {
-    echo "Invalid request method.";
-}
+} // No need for an 'else' block for request method check
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,9 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="customer_id">Select Customer:</label>
         <select id="customer_id" name="customer_id" required>
             <?php echo $customerOptions; ?>
-        </select><br><br>  
-        
+        </select><br><br>    
         <input type="submit" value="Submit">
     </form>
+    
+    <a href="bill-editing.php">Edit Bill</a> <!-- Edit link -->
+    <a href="employee.php">Back</a> <!-- Back link -->
+
 </body>
 </html>
