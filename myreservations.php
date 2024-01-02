@@ -33,6 +33,7 @@
 <body>
     <div class="reservation-list">
         <h1>My Reservations</h1>
+        <a href="customer.php">Go Back</a>
         <?php
         session_start();
         include 'db.php'; // Include your database connection

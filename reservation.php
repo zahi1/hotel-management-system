@@ -48,6 +48,7 @@
 <body>
     <div class="reservation-form">
         <h1>Room Reservation</h1>
+        <a href="customer.php">Go Back</a>
         <form action="" method="POST">
             <label for="check_in_date">Check-In Date:</label>
             <input type="date" id="check_in_date" name="check_in_date" required><br><br>
