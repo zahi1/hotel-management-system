@@ -1,20 +1,36 @@
 <?php
+session_start();
+
+$userid = $_SESSION['user_id'];
+
 include 'db.php'; // Database connection file
 
+
+
+// Fetch list of customers
+$sql = "SELECT id_User, CONCAT(id_User, '-', firstname) AS display_name FROM Customers";
+$result = $conn->query($sql);
+
+$customerOptions = '';
+while ($row = $result->fetch_assoc()) {
+    $customerId = $row['id_User'];
+    $displayName = $row['display_name'];
+    $customerOptions .= "<option value='$customerId'>$displayName</option>";
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve form data
     $bill_amount = $_POST['bill_amount'];
     $date_generated = $_POST['date_generated'];
-    $customer_name = $_POST['customer_name'];
-    $employee_id = $_POST['fk_Employeeid_User'];
-    $payment_id = $_POST['fk_Paymentid_Payment'];
+    $customer_id = $_POST['customer_id']; // Updated field name
+    $employee_id = $userid;
+ 
 
     // Perform any necessary data validation here...
 
     // Insert into Bills table
-    $sql = "INSERT INTO Bills (bill_amount, date_generated, customer_name, fk_Employeeid_User, fk_Paymentid_Payment)
-            VALUES ('$bill_amount', '$date_generated', '$customer_name', '$employee_id', '$payment_id')";
+    $sql = "INSERT INTO Bills (bill_amount, date_generated, customer_id, fk_Employeeid_User)
+            VALUES ('$bill_amount', '$date_generated', '$customer_id', '$employee_id')";
     
     if ($conn->query($sql) === TRUE) {
         echo "Bill created successfully!";
@@ -41,15 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="date_generated">Date Generated:</label>
         <input type="datetime-local" id="date_generated" name="date_generated" required><br><br>
         
-        <label for="customer_name">Customer Name:</label>
-        <input type="text" id="customer_name" name="customer_name" required><br><br>
-        
-        <!-- Other necessary fields for employee ID and payment ID -->
-        <label for="fk_Employeeid_User">Employee ID:</label>
-        <input type="text" id="fk_Employeeid_User" name="fk_Employeeid_User" required><br><br>
-        
-        <label for="fk_Paymentid_Payment">Payment ID:</label>
-        <input type="text" id="fk_Paymentid_Payment" name="fk_Paymentid_Payment"><br><br>
+        <label for="customer_id">Select Customer:</label>
+        <select id="customer_id" name="customer_id" required>
+            <?php echo $customerOptions; ?>
+        </select><br><br>  
         
         <input type="submit" value="Submit">
     </form>
