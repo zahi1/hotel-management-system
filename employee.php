@@ -16,6 +16,7 @@ echo 'Hello, ' . $username . '!';
         <li><a href="Bill-form.php">Bill Form</a></li>
         <li><a href="Customer-requests-page.php">Customer Requests</a></li>
         <li><a href="Reservation-form.php">Reservation Form</a></li>
+        <li><a href="Report.php">Report</a></li>
     </ul>
     <form action="logout.php" method="post" class="logout-form">
         <button type="submit">Logout</button>
