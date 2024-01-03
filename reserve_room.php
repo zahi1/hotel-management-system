@@ -51,14 +51,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_reservation'])
 
                 // Send email
                 if ($mail->send()) {
-                    echo "Email sent successfully to $to";
+                    //echo "Email sent successfully to $to";
                 } else {
                     echo "Failed to send email to $to. Error: {$mail->ErrorInfo}";
                 }
             } catch (Exception $e) {
                 echo "Mailer Error: {$mail->ErrorInfo}";
             }
-            echo "Room reserved successfully!";
+            header("Location: myreservations.php");
         } else {
             echo "Error updating room status: " . $conn->error;
         }

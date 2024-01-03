@@ -75,14 +75,13 @@
             $_SESSION['check_out_date'] =$_POST["check_out_date"];
             $check_in_date = $_SESSION['check_in_date'];
             $check_out_date = $_SESSION['check_out_date'];
-            
-            $sql = "SELECT * FROM Rooms WHERE room_number NOT IN (SELECT fk_Roomroom_number FROM Reservations WHERE ('$check_in_date' BETWEEN check_in_date AND check_out_date) OR ('$check_out_date' BETWEEN check_in_date AND check_out_date))";
-            
+            $sql ="SELECT * FROM Rooms 
+            WHERE room_number NOT IN (
+                SELECT fk_Roomroom_number FROM Reservations 
+                WHERE ('$check_in_date' <=   check_out_date) AND ('$check_out_date' >= check_in_date))";
             $result = $conn->query($sql);
-            
-
             if ($result->num_rows > 0) {
-                echo "<h2>Available Rooms:</h2>";
+                echo "<h2>Available Rooms:</h2>";   
                 echo "<ul>";
                 while ($row = $result->fetch_assoc()) {
                     echo "<li>";

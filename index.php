@@ -27,12 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         switch ($_SESSION['role']) {
             case 'admin':
+                sleep(1);
                 header("Location: admin.php");
                 break;
             case 'customer':
+                sleep(1);
                 header("Location: customer.php");
                 break;
             case 'employee':
+                sleep(1);
                 header("Location: employee.php");
                 break;
             default:
