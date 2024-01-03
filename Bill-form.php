@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <h2>Bill Form</h2>
     <form action="Bill-form.php" method="post">
         <label for="bill_amount">Bill Amount:</label>
@@ -61,6 +62,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     <a href="bill-editing.php">Edit Bill</a> <!-- Edit link -->
     <a href="employee.php">Back</a> <!-- Back link -->
+    <br><br>
+    <button onclick="redirectToSend()">Bill Sending Form</button>
+    <script>
+        
+        function redirectToSend() {
+            window.location.href = 'Billsending.php';
+        }
+    </script>
 
 </body>
 </html>
