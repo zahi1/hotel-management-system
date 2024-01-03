@@ -122,8 +122,8 @@ if (isset($_POST['addRoom'])) {
     $status = $_POST['status'];
 
     // Retrieve admin_id from the session
-    if (isset($_SESSION['admin_id'])) {
-        $admin_id = $_SESSION['admin_id'];
+    if (isset($_SESSION['user_id'])) {
+        $admin_id = $_SESSION['user_id'];
 
         // Insert the new room record using the admin_id from the session
         $addQuery = "INSERT INTO rooms (fk_Administratorid_User, start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status) VALUES ('$admin_id', '$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status')";
