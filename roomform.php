@@ -14,11 +14,7 @@
 
     <?php
     include 'db.php';  // Make sure this file initializes the $conn variable
-
-    function refreshPage() {
-       // header("Refresh:5");  // This will refresh the page after 0 seconds
-    }
-    
+    session_start();
 
     $sql = "SELECT * FROM rooms";
     $result = $conn->query($sql);
@@ -41,7 +37,7 @@
             echo '<td><input type="text" name="status" value="'.$row['status'].'" required></td>';
             echo '<td>';
             echo '<input type="hidden" name="room_number" value="'.$row['room_number'].'">';
-            echo '<button type="submit" name="edit">Save</button>';
+            echo '<button type="submit" name="edit" onclick="return confirm(\'Are you sure you want to save changes?\')">Save</button>';
             echo '<button type="submit" name="delete" onclick="return confirm(\'Are you sure you want to delete this room?\')">Delete</button>';
             echo '</td>';
             echo '</tr>';
@@ -71,9 +67,6 @@
     echo '</form>';
     echo '</div>';
 
-   
-    // ... [Your existing code above remains unchanged]
-    
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST['edit'])) {
             $room_number = $_POST['room_number'];
@@ -89,10 +82,10 @@
             $updateQuery = "UPDATE rooms SET type='$type', price='$price', size='$size', maximum_occupancy='$maximum_occupancy', room_view='$room_view', air_conditioning='$air_conditioning', coffee_maker='$coffee_maker', status='$status' WHERE room_number='$room_number'";
             
             if ($conn->query($updateQuery) === TRUE) {
-                echo "Room details updated successfully.";
-                refreshPage();
+                header("Location: {$_SERVER['PHP_SELF']}");
+                exit();
             } else {
-                echo "Error updating room details: " . $conn->error;
+                echo "Error updating room: " . $conn->error;
             }
         }
     
@@ -101,41 +94,61 @@
             $deleteQuery = "DELETE FROM rooms WHERE room_number = '$room_numberToDelete'";
             
             if ($conn->query($deleteQuery) === TRUE) {
-                echo "Room deleted successfully.";
-                refreshPage();
+                header("Location: {$_SERVER['PHP_SELF']}");
+                exit();
             } else {
                 echo "Error deleting room: " . $conn->error;
             }
         }
-    
-        if (isset($_POST['addRoom'])) {
-            $start_date = $_POST['start_date'];
-            $room_number = $_POST['room_number'];
-            $type = $_POST['type'];
-            $price = $_POST['price'];
-            $size = $_POST['size'];
-            $maximum_occupancy = $_POST['maximum_occupancy'];
-            $room_view = $_POST['room_view'];
-            $air_conditioning = $_POST['air_conditioning'];
-            $coffee_maker = $_POST['coffee_maker'];
-            $status = $_POST['status'];
-    
-            $addQuery = "INSERT INTO rooms (start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status) VALUES ('$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status')";
-    
-            if ($conn->query($addQuery) === TRUE) {
-                echo "New room added successfully.";
-                refreshPage();
-            } else {
-                echo "Error adding room: " . $conn->error;
-            }
+
+        // ... other parts of your code ...
+
+if (isset($_POST['addRoom'])) {
+    $start_date = $_POST['start_date'];
+    $room_number = $_POST['room_number'];
+    $type = $_POST['type'];
+    $price = $_POST['price'];
+    $size = $_POST['size'];
+    $maximum_occupancy = $_POST['maximum_occupancy'];
+    $room_view = $_POST['room_view'];
+    $air_conditioning = $_POST['air_conditioning'];
+    $coffee_maker = $_POST['coffee_maker'];
+    $status = $_POST['status'];
+
+    // Retrieve admin_id from the session
+    if (isset($_SESSION['admin_id'])) {
+        $admin_id = $_SESSION['admin_id'];
+
+        // Insert the new room record using the admin_id from the session
+        $addQuery = "INSERT INTO rooms (fk_Administratorid_User, start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status) VALUES ('$admin_id', '$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status')";
+        
+        // Execute the SQL query
+        if ($conn->query($addQuery) === TRUE) {
+            echo "New room added successfully.";
+        } else {
+            echo "Error adding room: " . $conn->error;
         }
+
+        // Refresh the page after the operation
+        echo "<script>location.reload();</script>";
+    } else {
+        // Handle the case where admin_id is not set in the session
+        echo "Admin ID not found in session.";
+    }
+}
+
+// ... rest of your PHP code ...
+
     }
     
     $conn->close();
     ?>
+    <br><br>
+    <br><br>
+    <button onclick="redirectToAdminPage()">Home</button>
+    <br><br>
+    <button onclick="redirectrooms()">Rooms page</button>
     
-    
-
     <script>
         function showAddRoomForm() {
             var form = document.getElementById('addRoomForm');
@@ -144,6 +157,12 @@
             } else {
                 form.style.display = 'none';
             }
+        }
+        function redirectToAdminPage() {
+            window.location.href = 'admin.php';
+        }
+        function redirectTorooms() {
+            window.location.href = 'Roomlistpage.php';
         }
     </script>
 
