@@ -16,6 +16,12 @@
     include 'db.php';  // Make sure this file initializes the $conn variable
     session_start();
 
+    function refreshPage() {
+       // header("Refresh:5");  // This will refresh the page after 0 seconds
+    }
+    
+
+
     $sql = "SELECT * FROM rooms";
     $result = $conn->query($sql);
 
@@ -127,7 +133,30 @@ if (isset($_POST['addRoom'])) {
             echo "New room added successfully.";
         } else {
             echo "Error adding room: " . $conn->error;
-        }
+
+    
+        if (isset($_POST['addRoom'])) {
+            $start_date = $_POST['start_date'];
+            $room_number = $_POST['room_number'];
+            $type = $_POST['type'];
+            $price = $_POST['price'];
+            $size = $_POST['size'];
+            $maximum_occupancy = $_POST['maximum_occupancy'];
+            $room_view = $_POST['room_view'];
+            $air_conditioning = $_POST['air_conditioning'];
+            $coffee_maker = $_POST['coffee_maker'];
+            $status = $_POST['status'];
+            $user_id = $_SESSION['user_id'];
+    
+            $addQuery = "INSERT INTO rooms (start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status,fk_Administratorid_User ) VALUES ('$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status','$user_id')";
+    
+            if ($conn->query($addQuery) === TRUE) {
+                echo "New room added successfully.";
+                refreshPage();
+            } else {
+                echo "Error adding room: " . $conn->error;
+            }
+        
 
         // Refresh the page after the operation
         echo "<script>location.reload();</script>";
@@ -135,6 +164,8 @@ if (isset($_POST['addRoom'])) {
         // Handle the case where admin_id is not set in the session
         echo "Admin ID not found in session.";
     }
+}
+}
 }
 
 // ... rest of your PHP code ...
@@ -161,7 +192,7 @@ if (isset($_POST['addRoom'])) {
         function redirectToAdminPage() {
             window.location.href = 'admin.php';
         }
-        function redirectTorooms() {
+        function redirectrooms() {
             window.location.href = 'Roomlistpage.php';
         }
     </script>

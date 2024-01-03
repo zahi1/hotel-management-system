@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,16 +44,23 @@
             text-decoration: none;
             cursor: pointer;
         }
+        img{
+            width: 200px;
+            height: 200px;
+        }
     </style>
 </head>
 <body>
     <div class="reservation-form">
         <h1>Room Reservation</h1>
         <a href="customer.php">Go Back</a>
-        <form action="" method="POST">
-            <label for="check_in_date">Check-In Date:</label>
-            <input type="date" id="check_in_date" name="check_in_date" required><br><br>
-            
+        <form action="" method="POST" id="reservationForm">
+            <?php
+            // Set the minimum value for check-in date to today's date
+            $today = date("Y-m-d");
+            echo "<label for='check_in_date'>Check-In Date:</label>";
+            echo "<input type='date' id='check_in_date' name='check_in_date' min='{$today}' required><br><br>";
+            ?>
             <label for="check_out_date">Check-Out Date:</label>
             <input type="date" id="check_out_date" name="check_out_date" required><br><br>
             
@@ -78,13 +86,22 @@
                 echo "<h2>Available Rooms:</h2>";
                 echo "<ul>";
                 while ($row = $result->fetch_assoc()) {
-                    echo "<li>Room Number: " . $row['room_number'] . ", Type: " . $row['type'] . ", Price: $" . $row['price'] . 
-                        " <button type='button' class='reserve-btn' data-room-number='" . $row['room_number'] . "'>Reserve</button></li>";
+                    echo "<li>";
+                    echo "<img src='imgs/" . $row['image'] . "' alt='" . $row['image'] . "'>";
+                    echo "<h3>Type: " . $row['type'] . "</h3>";
+                    echo "<p>Price: $" . $row['price'] . "</p>";
+                    echo "<p>Maximum Occupancy: " . $row['maximum_occupancy'] . "</p>";
+                    echo "<button type='button' class='reserve-btn' data-room-number='" . $row['room_number'] . "' data-max-occupancy='" . $row['maximum_occupancy'] . "'>Reserve</button>";
+                    echo "</li>";
+                    echo"<br>";
                 }
                 echo "</ul>";
             } else {
                 echo "<p>No available rooms for selected dates.</p>";
             }
+            
+            
+            
         }
         ?>
         
@@ -119,18 +136,35 @@
     const roomNumberInput = document.getElementById('room_number');
 
     reserveButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const roomNumber = button.getAttribute('data-room-number');
-            selectedRoomInput.value = roomNumber;
-            roomNumberInput.value = roomNumber; // Update the room number input field
-            modal.style.display = 'block';
-        });
+    button.addEventListener('click', () => {
+        const roomNumber = button.getAttribute('data-room-number');
+        const maxOccupancy = button.getAttribute('data-max-occupancy');
+
+        selectedRoomInput.value = roomNumber;
+        roomNumberInput.value = roomNumber;
+
+        document.getElementById('number_of_guests').setAttribute('max', maxOccupancy);
+
+        modal.style.display = 'block';
     });
+});
+
 
     function closeModal() {
         modal.style.display = 'none';
     }
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const checkInDate = new Date(document.getElementById('check_in_date').value);
+        const checkOutDate = new Date(document.getElementById('check_out_date').value);
+
+        if (checkOutDate < checkInDate) {
+            alert('Check-out date cannot be earlier than the check-in date');
+            event.preventDefault(); // Prevent form submission
+        }
+    });
 </script>
 
 </body>
 </html>
+=======
+>>>>>>> 7a1665fa7d80f930ddb7272f245d509c6dc5d712

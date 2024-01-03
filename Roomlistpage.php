@@ -1,14 +1,19 @@
 <?php
 include 'db.php';  // Including the database connection file
-
+function refreshPage() {
+    header("Refresh:1");  // This will refresh the page after 0 seconds
+ }
 // Fetch rooms from the database
 $query = "SELECT * FROM rooms";
-$result = mysqli_query($conn, $query);
+$stmt = mysqli_prepare($conn, $query);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
+// Check if rooms are fetched successfully
 if ($result) {
     $rooms = mysqli_fetch_all($result, MYSQLI_ASSOC);
 } else {
-    $rooms = [];
+    $rooms = [];  // Empty array if no rooms are fetched
 }
 
 $selectedRoom = isset($_POST['selectedRoom']) ? $_POST['selectedRoom'] : '';
@@ -33,8 +38,52 @@ if (isset($_POST['similar'])) {
             $noSimilarRooms = true;  // Flag to indicate no similar rooms
         }
     }
-}
-?>
+    }
+    if (isset($_POST['remove'])) {
+        $selectedRoomNumber = $_POST['selectedRoom'];
+        $deleteQuery = "DELETE FROM rooms WHERE room_number = '$selectedRoomNumber'";
+        //$stmt = mysqli_prepare($conn, $deleteQuery);
+        //mysqli_stmt_bind_param($stmt, 's', $selectedRoomNumber);
+        if ($conn->query($deleteQuery) === TRUE) {
+            echo "<p>Reservation canceled successfully.</p>";
+            refreshPage();
+        } else {
+            echo "<p>Error canceling reservation: " . $conn->error . "</p>";
+        }
+        // if (mysqli_stmt_execute($stmt)) {
+        //     echo "Room removed successfully.";
+        // } else {
+        //     echo "Error: " . mysqli_error($conn);
+        // }
+      
+    }
+    
+    // Handle room unassignment
+    if (isset($_POST['unassign'])) {
+        $selectedRoomNumber = $_POST['selectedRoom'];
+        echo "$selectedRoomNumber";
+        $updateStatusQuery = "UPDATE rooms SET status = 'available' WHERE room_number ='$selectedRoomNumber'";
+        if ($conn->query($updateStatusQuery) === TRUE) {
+            echo "<p>Reservation canceled successfully.</p>";
+            refreshPage();
+
+
+        } else {
+            echo "<p>Error canceling reservation: " . $conn->error . "</p>";
+        }
+        // if (mysqli_stmt_execute($stmt)) {
+        //     echo "Room unassigned successfully.";
+        // } else {
+        //     echo "Error: " . mysqli_error($conn);
+        // }
+    }
+    
+   // $selectedRoom = isset($_POST['selectedRoom']) ? $_POST['selectedRoom'] : '';
+
+
+    ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
