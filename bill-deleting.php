@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 $userid = $_SESSION['user_id'];
 
 include 'db.php'; // Database connection file
@@ -21,55 +20,51 @@ if ($result && $result->num_rows > 0) {
     exit; // Exit if no bills are found
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['date_generated'], $_POST['bill_amount'])) {
-    // Retrieve modified form data
-    $updated_bill_id = $_POST['bill_id'];
-    $updated_date_generated = $_POST['date_generated'];
-    $updated_bill_amount = $_POST['bill_amount'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
+    $delete_bill_id = $_POST['bill_id'];
 
-    // Perform any necessary data validation here...
+    // Check if the user is authorized to delete this bill
+    $authorization_sql = "SELECT * FROM Bills WHERE id_Bill = $delete_bill_id AND fk_Employeeid_User = $userid";
+    $authorization_result = $conn->query($authorization_sql);
 
-    // Update the specific bill in the database
-    $update_sql = "UPDATE Bills 
-                    SET date_generated = '$updated_date_generated', 
-                        bill_amount = '$updated_bill_amount'
-                    WHERE id_Bill = $updated_bill_id AND fk_Employeeid_User = $userid";
-
-    if ($conn->query($update_sql) === TRUE) {
-        header("Location: Bill-form.php");
-        exit;
+    if ($authorization_result && $authorization_result->num_rows > 0) {
+        // User is authorized to delete this bill
+        $delete_sql = "DELETE FROM Bills WHERE id_Bill = $delete_bill_id";
+        
+        if ($conn->query($delete_sql) === TRUE) {
+            header("Location: Bill-form.php");
+            exit; // Exit the script after redirection
+        } else {
+            echo "Error deleting bill: " . $conn->error;
+        }
     } else {
-        echo "Error updating bill: " . $conn->error;
+        echo "Not authorized to delete this bill";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Bills</title>
+    <title>Delete Bills</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Edit Bills</h2>
+    <h2>Delete Bills</h2>
     <table>
         <tr>
             <th>Bill ID</th>
             <th>Date Generated</th>
             <th>Bill Amount</th>
             <th>Customer Details</th>
-            <th>Modify</th>
+            <th>Delete</th>
         </tr>
         <?php foreach ($billsData as $bill): ?>
             <tr>
-                <form action="bill-editing.php" method="post">
+                <form action="bill-deleting.php" method="post">
                     <td><?php echo $bill['id_Bill']; ?></td>
-                    <td>
-                        <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
-                        <input type="datetime-local" name="date_generated" value="<?php echo $bill['date_generated']; ?>" required>
-                    </td>
-                    <td>
-                        <input type="text" name="bill_amount" value="<?php echo $bill['bill_amount']; ?>" required>
-                    </td>
+                    <td><?php echo $bill['date_generated']; ?></td>
+                    <td><?php echo $bill['bill_amount']; ?></td>
                     <td>
                         <input type="hidden" name="customer_id" value="<?php echo $bill['customer_id']; ?>">
                         <span>ID: <?php echo $bill['customer_id']; ?></span><br>
@@ -77,7 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
                     </td>
                     <td>
                         <?php if ($userid == $bill['fk_Employeeid_User']): ?>
-                            <input type="submit" value="Update">
+                            <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
+                            <input type="submit" value="Delete">
                         <?php else: ?>
                             Not authorized
                         <?php endif; ?>

@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
     
     <a href="bill-editing.php">Edit Bill</a> <!-- Edit link -->
+    <a href="bill-deleting.php">Delete Bill</a> <!-- Edit link -->
     <a href="employee.php">Back</a> <!-- Back link -->
     <br><br>
     <button onclick="redirectToSend()">Bill Sending Form</button>
