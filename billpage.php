@@ -8,18 +8,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['am
     $amount = $_POST['amount'];
 
     // Store the payment details in the database
-    $insert_sql = "INSERT INTO payments (amount, date_time, fk_Customerid_User) VALUES ('$amount', NOW(), '$userid')";
+    $insert_sql = "INSERT INTO payments (amount, date_time, fk_Customerid_User, status) VALUES ('$amount', NOW(), '$userid', 'paid')";
     if ($conn->query($insert_sql) === TRUE) {
-        // Proceed to payment processing using Stripe
-        header("Location: checkout.php?bill_id=$bill_id&amount=$amount");
-        exit();
+        // Update status in bills table
+        $update_sql = "UPDATE bills SET status = 'paid' WHERE id_Bill = $bill_id";
+        if ($conn->query($update_sql) === TRUE) {
+            // Proceed to payment processing using Stripe
+            header("Location: checkout.php?bill_id=$bill_id&amount=$amount");
+            exit();
+        } else {
+            echo "Error updating status: " . $conn->error;
+        }
     } else {
         echo "Error: " . $conn->error;
     }
 }
 
-// Fetch all bills of the logged-in customer
-$sql = "SELECT * FROM Bills WHERE customer_id = $userid";
+// Fetch unpaid bills of the logged-in customer
+$sql = "SELECT * FROM bills WHERE customer_id = $userid AND status = 'unpaid'";
 $result = $conn->query($sql);
 
 $billsData = [];
@@ -28,18 +34,18 @@ if ($result && $result->num_rows > 0) {
         $billsData[] = $row;
     }
 } else {
-    echo "No bills found for this customer.";
+    echo "No unpaid bills found for this customer.";
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Bills</title>
+    <title>Customer Unpaid Bills</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Customer Bills</h2>
+    <h2>Customer Unpaid Bills</h2>
     <table>
         <tr>
             <th>Bill ID</th>
