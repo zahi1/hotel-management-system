@@ -43,6 +43,10 @@
             text-decoration: none;
             cursor: pointer;
         }
+        img{
+            width: 200px;
+            height: 200px;
+        }
     </style>
 </head>
 <body>
@@ -81,14 +85,21 @@
                 echo "<h2>Available Rooms:</h2>";
                 echo "<ul>";
                 while ($row = $result->fetch_assoc()) {
-                    echo "<li>Room Number: " . $row['room_number'] . ", Type: " . $row['type'] . ", Price: $" . $row['price'] . 
-                        ", Maximum Occupancy: " . $row['maximum_occupancy'] .
-                        " <button type='button' class='reserve-btn' data-room-number='" . $row['room_number'] . "' data-max-occupancy='" . $row['maximum_occupancy'] . "'>Reserve</button></li>";
+                    echo "<li>";
+                    echo "<img src='imgs/" . $row['image'] . "' alt='" . $row['image'] . "'>";
+                    echo "<h3>Type: " . $row['type'] . "</h3>";
+                    echo "<p>Price: $" . $row['price'] . "</p>";
+                    echo "<p>Maximum Occupancy: " . $row['maximum_occupancy'] . "</p>";
+                    echo "<button type='button' class='reserve-btn' data-room-number='" . $row['room_number'] . "' data-max-occupancy='" . $row['maximum_occupancy'] . "'>Reserve</button>";
+                    echo "</li>";
+                    echo"<br>";
                 }
                 echo "</ul>";
             } else {
                 echo "<p>No available rooms for selected dates.</p>";
             }
+            
+            
             
         }
         ?>
