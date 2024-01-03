@@ -31,13 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
 
     if ($authorization_result && $authorization_result->num_rows > 0) {
         // User is authorized to delete this unpaid bill
-        $delete_sql = "DELETE FROM Bills WHERE id_Bill = $delete_bill_id";
+        if (isset($_POST['confirmed']) && $_POST['confirmed'] === 'true') {
+            $delete_sql = "DELETE FROM Bills WHERE id_Bill = $delete_bill_id";
         
-        if ($conn->query($delete_sql) === TRUE) {
-            header("Location: Bill-form.php");
-            exit; // Exit the script after redirection
-        } else {
-            echo "Error deleting bill: " . $conn->error;
+            if ($conn->query($delete_sql) === TRUE) {
+                header("Location: Bill-form.php");
+                exit; // Exit the script after redirection
+            } else {
+                echo "Error deleting bill: " . $conn->error;
+            }
         }
     } else {
         echo "Not authorized to delete this bill or it's already paid";
@@ -50,6 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
 <head>
     <title>Delete Unpaid Bills</title>
     <link rel="stylesheet" href="styles.css">
+    <script>
+        function confirmDelete(billId) {
+            if (confirm("Are you sure you want to delete this bill?")) {
+                var form = document.getElementById("deleteForm_" + billId);
+                form.elements["confirmed"].value = "true";
+                form.submit();
+            }
+        }
+    </script>
 </head>
 <body>
     <h2>Delete Unpaid Bills</h2>
@@ -63,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
         </tr>
         <?php foreach ($billsData as $bill): ?>
             <tr>
-                <form action="bill-deleting.php" method="post">
+                <form id="deleteForm_<?php echo $bill['id_Bill']; ?>" action="bill-deleting.php" method="post">
                     <td><?php echo $bill['id_Bill']; ?></td>
                     <td><?php echo $bill['date_generated']; ?></td>
                     <td><?php echo $bill['bill_amount']; ?></td>
@@ -75,7 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
                     <td>
                         <?php if ($userid == $bill['fk_Employeeid_User']): ?>
                             <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
-                            <input type="submit" value="Delete">
+                            <input type="hidden" name="confirmed" value="false">
+                            <button type="button" onclick="confirmDelete(<?php echo $bill['id_Bill']; ?>)">Delete</button>
                         <?php else: ?>
                             Not authorized
                         <?php endif; ?>
@@ -85,6 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
         <?php endforeach; ?>
     </table>
 
-    <a href="Bill-form.php">Back to Bill form</a>
+    <form action="Bill-form.php">
+        <button type="submit">Back</button>
+    </form>
 </body>
 </html>

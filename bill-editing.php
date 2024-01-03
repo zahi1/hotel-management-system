@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
         </tr>
         <?php foreach ($billsData as $bill): ?>
             <tr>
-                <form action="bill-editing.php" method="post">
+                <form action="bill-editing.php" method="post" onsubmit="return confirm('Are you sure you want to update this bill?')">
                     <td><?php echo $bill['id_Bill']; ?></td>
                     <td>
                         <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
@@ -89,6 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
         <?php endforeach; ?>
     </table>
 
-    <a href="Bill-form.php">Back to Bill form</a>
+    <form action="Bill-form.php">
+        <button type="submit">Back</button>
+    </form>
 </body>
 </html>

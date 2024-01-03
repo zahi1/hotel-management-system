@@ -33,8 +33,6 @@ if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $billsData[] = $row;
     }
-} else {
-    echo "No unpaid bills found for this customer.";
 }
 ?>
 
@@ -43,30 +41,39 @@ if ($result && $result->num_rows > 0) {
 <head>
     <title>Customer Unpaid Bills</title>
     <link rel="stylesheet" href="styles.css">
+    <script>
+        function confirmPayment() {
+            return confirm('Are you sure you want to pay this bill?');
+        }
+    </script>
 </head>
 <body>
-    <h2>Customer Unpaid Bills</h2>
-    <table>
-        <tr>
-            <th>Bill ID</th>
-            <th>Amount</th>
-            <th>Date Generated</th>
-            <th>Pay Bill</th>
-        </tr>
-        <?php foreach ($billsData as $bill): ?>
+    <?php if (!empty($billsData)): ?>
+        <h2>Customer Unpaid Bills</h2>
+        <table>
             <tr>
-                <td><?php echo $bill['id_Bill']; ?></td>
-                <td><?php echo $bill['bill_amount']; ?></td>
-                <td><?php echo $bill['date_generated']; ?></td>
-                <td>
-                    <form action="billpage.php" method="post">
-                        <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
-                        <input type="hidden" name="amount" value="<?php echo $bill['bill_amount']; ?>">
-                        <input type="submit" value="Pay Bill">
-                    </form>
-                </td>
+                <th>Bill ID</th>
+                <th>Amount</th>
+                <th>Date Generated</th>
+                <th>Pay Bill</th>
             </tr>
-        <?php endforeach; ?>
-    </table>
+            <?php foreach ($billsData as $bill): ?>
+                <tr>
+                    <td><?php echo $bill['id_Bill']; ?></td>
+                    <td><?php echo $bill['bill_amount']; ?></td>
+                    <td><?php echo $bill['date_generated']; ?></td>
+                    <td>
+                        <form action="billpage.php" method="post" onsubmit="return confirmPayment()">
+                            <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
+                            <input type="hidden" name="amount" value="<?php echo $bill['bill_amount']; ?>">
+                            <input type="submit" value="Pay Bill">
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php else: ?>
+        <p>No unpaid bills found for this customer.</p>
+    <?php endif; ?>
 </body>
 </html>
