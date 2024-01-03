@@ -34,19 +34,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_reservation'])
                 $mail->Host = 'smtp.gmail.com'; // SMTP server
                 $mail->SMTPAuth = true;
                 $mail->Username = 'hms2024KTU@gmail.com'; // SMTP username
-                $mail->Password = 'eafn vdab zcpl ergc'; // SMTP password
+                $mail->Password = 'eafn vdab zcpl ergc'; 
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
                 // Recipient
-                $to = 'vimalrajvarunjosh@gmail.com'; // Customer's email address
-                $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); // Sender's email and name
+                $to = 'vimalrajvarunjosh@gmail.com'; 
+                $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); 
                 $mail->addAddress($to);
 
                 // Email content
-                $mail->isHTML(false); // Set to true if using HTML content
+                $mail->isHTML(false); 
                 $mail->Subject = 'Reservation Confirmation';
-                $mail->Body = 'Dear Customer, Your reservation has been confirmed.'; // Your email message
+                $mail->Body = 'Dear Customer, Your reservation has been confirmed.';
 
                 // Send email
                 if ($mail->send()) {
