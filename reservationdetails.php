@@ -25,33 +25,41 @@
             
             if ($result->num_rows > 0) {
                 $reservation = $result->fetch_assoc();
-                    // Display the form to edit reservation details
-                    ?>
-                    <form action="" method="POST">
-                        <input type="hidden" name="reservation_id" value="<?php echo $reservation['id_Reservation']; ?>">
-                        
-                        <label for="guest_name">Customer Name:</label>
-                        <input type="text" id="guest_name" name="guest_name" value="<?php echo $reservation['guest_name']; ?>" readonly><br><br>
-                        
-                        <label for="check_in_date">Check-In Date:</label>
-                        <input type="date" id="check_in_date" name="check_in_date" value="<?php echo $reservation['check_in_date']; ?>" required><br><br>
-                        
-                        <label for="check_out_date">Check-Out Date:</label>
-                        <input type="date" id="check_out_date" name="check_out_date" value="<?php echo $reservation['check_out_date']; ?>" required><br><br>
-                        
-                        <label for="number_of_guests">Number of Guests:</label>
-                        <input type="number" id="number_of_guests" name="number_of_guests" value="<?php echo $reservation['number_of_guests']; ?>" required><br><br>
-                        
-                        <!-- Add more fields as needed -->
-                        
-                        <input type="submit" name="update_reservation" value="Update Reservation">
-                    </form>
-                    <?php
+                $room_number = $reservation['fk_Roomroom_number']; // Fetch the room number from the reservation
+                
+                // Query to get room details including maximum occupancy
+                $room_query = "SELECT * FROM Rooms WHERE room_number = '$room_number'";
+                $room_result = $conn->query($room_query);
+                
+                if ($room_result->num_rows > 0) {
+                    $room_details = $room_result->fetch_assoc();
+                    $maximum_occupancy = $room_details['maximum_occupancy'];
+                }
+            
+                // Display the form to edit reservation details
+                ?>
+                <form action="" method="POST">
+                    <input type="hidden" name="reservation_id" value="<?php echo $reservation['id_Reservation']; ?>">
+                    
+                    <label for="guest_name">Customer Name:</label>
+                    <input type="text" id="guest_name" name="guest_name" value="<?php echo $reservation['guest_name']; ?>" readonly><br><br>
+                    
+                    <label for="check_in_date">Check-In Date:</label>
+                    <input type="date" id="check_in_date" name="check_in_date" value="<?php echo $reservation['check_in_date']; ?>" required><br><br>
+                    
+                    <label for="check_out_date">Check-Out Date:</label>
+                    <input type="date" id="check_out_date" name="check_out_date" value="<?php echo $reservation['check_out_date']; ?>" required><br><br>
+                    
+                    <label for="number_of_guests">Number of Guests (Max <?php echo $maximum_occupancy; ?>):</label>
+                    <input type="number" id="number_of_guests" name="number_of_guests" value="<?php echo $reservation['number_of_guests']; ?>" required max="<?php echo $maximum_occupancy; ?>"><br><br>
+                    
+                    <!-- Add more fields as needed -->
+                    
+                    <input type="submit" name="update_reservation" value="Update Reservation">
+                </form>
+                <?php
             }
-            // } else {
-            //     echo "<p>Reservation not found or you do not have permission to edit this reservation.</p>";
-            // }
-        //}
+            
         if (isset($_POST['update_reservation'])) {
             $check_in_date = $_POST['check_in_date'];
             $check_out_date = $_POST['check_out_date'];
