@@ -56,27 +56,42 @@ $conn->close();
 <head>
     <title>Report Form</title>
     <link rel="stylesheet" href="styles.css">
+    <script>
+        function toggleReportForm() {
+            var x = document.getElementById("reportForm");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
-    <h2>Report Form</h2>
-    <form action="" method="post">
-        <label for="customer_name">Customer Name:</label>
-        <select id="customer_name" name="customer_name" required>
-            <?php echo $customerOptions; ?>
-        </select><br><br>
+    <h2>Report Management</h2>
+    <button onclick="toggleReportForm()">Add a Report</button>
+    <button onclick="location.href='Report-List.php'">View Reports</button>
+    <div id="reportForm" style="display:none;">
+        <h3>Add Report</h3>
+        <form action="" method="post">
+            <label for="customer_name">Customer Name:</label>
+            <select id="customer_name" name="customer_name" required>
+                <?php echo $customerOptions; ?>
+            </select><br><br>
 
-        <label for="date_time">Date and Time:</label>
-        <input type="datetime-local" id="date_time" name="date_time" required><br><br>
+            <label for="date_time">Date and Time:</label>
+            <input type="datetime-local" id="date_time" name="date_time" required><br><br>
 
-        <label for="bill_amount">Bill Amount:</label>
-        <input type="number" id="bill_amount" name="bill_amount" required><br><br>
+            <label for="bill_amount">Bill Amount:</label>
+            <input type="number" id="bill_amount" name="bill_amount" required><br><br>
 
-        <label for="service_id">Service Type:</label>
-        <select id="service_id" name="service_id" required>
-            <?php echo $serviceOptions; ?>
-        </select><br><br>
+            <label for="service_id">Service Type:</label>
+            <select id="service_id" name="service_id" required>
+                <?php echo $serviceOptions; ?>
+            </select><br><br>
 
-        <input type="submit" value="Submit">
-    </form>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 </body>
 </html>
