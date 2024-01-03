@@ -5,10 +5,12 @@ $userid = $_SESSION['user_id'];
 
 include 'db.php'; // Database connection file
 
-// Fetch all bills from the database with customer information
+// Fetch unpaid bills from the database with customer information
 $sql = "SELECT b.id_Bill, b.date_generated, b.bill_amount, c.id_User AS customer_id, CONCAT(c.id_User, '-', c.firstname) AS customer_name, b.fk_Employeeid_User
         FROM Bills b 
-        INNER JOIN Customers c ON b.customer_id = c.id_User";
+        INNER JOIN Customers c ON b.customer_id = c.id_User
+        WHERE b.status = 'unpaid'"; // Condition added to fetch only unpaid bills
+
 $result = $conn->query($sql);
 
 $billsData = [];
@@ -17,8 +19,8 @@ if ($result && $result->num_rows > 0) {
         $billsData[] = $row;
     }
 } else {
-    echo "No bills found.";
-    exit; // Exit if no bills are found
+    echo "No unpaid bills found.";
+    exit; // Exit if no unpaid bills are found
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['date_generated'], $_POST['bill_amount'])) {
@@ -46,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Bills</title>
+    <title>Edit Unpaid Bills</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Edit Bills</h2>
+    <h2>Edit Unpaid Bills</h2>
     <table>
         <tr>
             <th>Bill ID</th>
