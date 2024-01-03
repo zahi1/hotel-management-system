@@ -8,7 +8,7 @@
 <body>
     <h1>Thank you for your payment</h1>
     <form action="customer.php">
-        <button type="submit">Back to Customer Page</button>
+        <button type="submit">Back</button>
     </form>
 </body>
 </html>

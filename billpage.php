@@ -39,7 +39,7 @@ if ($result && $result->num_rows > 0) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Unpaid Bills</title>
+    <title>Customer Bills</title>
     <link rel="stylesheet" href="styles.css">
     <script>
         function confirmPayment() {
@@ -49,12 +49,13 @@ if ($result && $result->num_rows > 0) {
 </head>
 <body>
     <?php if (!empty($billsData)): ?>
-        <h2>Customer Unpaid Bills</h2>
+        <h2>Unpaid Bills</h2>
         <table>
             <tr>
                 <th>Bill ID</th>
                 <th>Amount</th>
                 <th>Date Generated</th>
+                <th>Remarks</th>
                 <th>Pay Bill</th>
             </tr>
             <?php foreach ($billsData as $bill): ?>
@@ -62,6 +63,7 @@ if ($result && $result->num_rows > 0) {
                     <td><?php echo $bill['id_Bill']; ?></td>
                     <td><?php echo $bill['bill_amount']; ?></td>
                     <td><?php echo $bill['date_generated']; ?></td>
+                    <td><?php echo $bill['remarks']; ?></td>
                     <td>
                         <form action="billpage.php" method="post" onsubmit="return confirmPayment()">
                             <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
@@ -75,5 +77,9 @@ if ($result && $result->num_rows > 0) {
     <?php else: ?>
         <p>No unpaid bills found for this customer.</p>
     <?php endif; ?>
+
+    <form action="customer.php">
+        <button type="submit">Back</button>
+    </form>
 </body>
 </html>
