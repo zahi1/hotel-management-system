@@ -81,7 +81,36 @@
                     echo "<td>" . $row['check_out_date'] . "</td>";
                     echo "<td>" . $row['room_number'] . "</td>";
                     echo "<td>" . $row['type'] . "</td>";
-                    echo "<td>" . $row['requested_service'] . "</td>";
+                    //echo "<td>" . $row['requested_service']  . "</td>";
+                    if (isset($_POST['edit_service'])) {
+                        $reservation_id = $_POST['reservation_id'];
+                        $selected_service = $_POST['requested_service'];
+                
+                        // Update the requested_service field in the Reservations table
+                        $update_service_sql = "UPDATE Reservations SET requested_service = '$selected_service' WHERE id_Reservation = '$reservation_id'";
+                        
+                        if ($conn->query($update_service_sql) === TRUE) {
+                            echo "<p>Service updated successfully.</p>";
+                        } else {
+                            echo "<p>Error updating service: " . $conn->error . "</p>";
+                        }
+                    }
+                    $services = array('car service', 'extra bed', 'room clean');
+                    echo "<td>" ;
+                    echo "<form method='POST'>";
+                    echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
+                    echo "<select name='requested_service'>";
+                    echo "<option value=''>Select service</option>";
+                    foreach ($services as $service) {
+                        echo "<option value='$service'";
+                        if ($row['requested_service'] === $service) {
+                            echo " selected";
+                        }
+                        echo ">$service</option>";
+                    }
+                    echo "</select>";
+                    echo "<input type='submit' class='edit-btn' name='edit_service' value='Edit'>";
+                    echo "</form>"; "</td>";
                     echo "<td>";
                     echo "<form method='POST'>";
                     echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
