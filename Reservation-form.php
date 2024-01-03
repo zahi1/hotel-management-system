@@ -30,7 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_id'], $_P
 }
 
 // Fetch reservation details with customer information
-$sql = "SELECT reservations.id_Reservation, reservations.checkinstatus, reservations.checkoutstatus, reservations.fk_Roomroom_number, reservations.fk_Customerid_User, customers.firstname, customers.lastname 
+// Fetch reservation details with customer information, including check-in and check-out dates
+$sql = "SELECT reservations.id_Reservation, reservations.checkinstatus, reservations.checkoutstatus, reservations.fk_Roomroom_number, reservations.fk_Customerid_User, customers.firstname, customers.lastname, reservations.check_in_date, reservations.check_out_date 
         FROM reservations 
         INNER JOIN customers ON reservations.fk_Customerid_User = customers.id_User";
 $result = $conn->query($sql);
@@ -57,7 +58,9 @@ if ($result && $result->num_rows > 0) {
         <tr>
             <th>Room Number</th>
             <th>Customer ID</th>
-            <th>Customer Name</th>
+            <th>Customer Full Name</th>
+            <th>Reservation from</th>
+            <th>Reservation till</th>
             <th>Check-in Status</th>
             <th>Check-out Status</th>
             <th>Modify</th>
@@ -68,6 +71,8 @@ if ($result && $result->num_rows > 0) {
                     <td><?php echo $reservation['fk_Roomroom_number']; ?></td>
                     <td><?php echo $reservation['fk_Customerid_User']; ?></td>
                     <td><?php echo $reservation['firstname'] . ' ' . $reservation['lastname']; ?></td>
+                    <td><?php echo $reservation['check_in_date']; ?></td>
+                    <td><?php echo $reservation['check_out_date']; ?></td>
                     <td>
                         <input type="hidden" name="reservation_id" value="<?php echo $reservation['id_Reservation']; ?>">
                         <input type="text" name="checkinstatus" value="<?php echo $reservation['checkinstatus']; ?>" required>
