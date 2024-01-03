@@ -1,7 +1,8 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require 'C:/Users/Varun Josh Vimalraj/vendor/autoload.php';
+require 'vendor1/autoload.php';
+
 
 session_start();
 include 'db.php'; // Include your database connection

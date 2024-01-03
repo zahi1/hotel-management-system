@@ -9,7 +9,7 @@ if ($_SESSION['role'] !== 'employee') {
 }
 
 // Fetch service requests
-$sql = "SELECT * FROM Reservations WHERE checkinstatus = 0";
+$sql = "SELECT * FROM Reservations WHERE requested_service IS NOT NULL";
 $result = $conn->query($sql);
 
 // Fetch list of employees
@@ -35,7 +35,7 @@ $employees_result = $conn->query($employees_sql);
             <th>Action</th>
         </tr>
         <?php
-        if ($result->num_rows > 0) {
+         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>" . $row['id_Reservation'] . "</td>";
@@ -45,6 +45,10 @@ $employees_result = $conn->query($employees_sql);
                 echo "<form method='POST' action='assign_request.php'>";
                 echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
                 echo "<select name='assigned_employee'>";
+
+                // Reset the internal pointer for employees_result
+                mysqli_data_seek($employees_result, 0);
+
                 while ($employee = $employees_result->fetch_assoc()) {
                     echo "<option value='" . $employee['id_User'] . "'>" . $employee['name'] . "</option>";
                 }
