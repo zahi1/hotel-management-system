@@ -9,7 +9,7 @@ if ($_SESSION['role'] !== 'employee') {
 }
 
 // Fetch service requests
-$sql = "SELECT * FROM Reservations WHERE requested_service IS NOT NULL";
+$sql = "SELECT * FROM Reservations WHERE requested_service IS NOT NULL AND id_Reservation NOT IN (SELECT fk_Reservationid_Reservation FROM services)";
 $result = $conn->query($sql);
 
 // Fetch list of employees
@@ -26,6 +26,7 @@ $employees_result = $conn->query($employees_sql);
     <!-- Additional styles or frameworks as needed -->
 </head>
 <body>
+    <a href="employee.php">Back</a>
     <h1>Service Requests</h1>
     <table>
         <tr>
@@ -37,6 +38,7 @@ $employees_result = $conn->query($employees_sql);
         <?php
          if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                
                 echo "<tr>";
                 echo "<td>" . $row['id_Reservation'] . "</td>";
                 echo "<td>" . $row['guest_name'] . "</td>";
@@ -65,3 +67,4 @@ $employees_result = $conn->query($employees_sql);
     </table>
 </body>
 </html>
+
