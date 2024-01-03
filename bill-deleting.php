@@ -18,7 +18,7 @@ if ($result && $result->num_rows > 0) {
         $billsData[] = $row;
     }
 } else {
-    echo "No unpaid bills found.";
+    echo "No bills to delete!.";
     exit; // Exit if no unpaid bills are found
 }
 

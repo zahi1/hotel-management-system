@@ -75,7 +75,7 @@ if ($result && $result->num_rows > 0) {
             <?php endforeach; ?>
         </table>
     <?php else: ?>
-        <p>No unpaid bills found for this customer.</p>
+        <p>No unpaid bills!</p>
     <?php endif; ?>
 
     <form action="customer.php">
