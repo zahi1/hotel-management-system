@@ -1,8 +1,8 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+//require 'C:\Users\zalal\vendor\autoload.php';
 require 'vendor1/autoload.php';
-
 // Include the database connection file (replace 'your_db_connection.php' with your actual file)
 include('db.php');
 

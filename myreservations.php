@@ -2,39 +2,17 @@
 <html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <style>
-        body {
-            background-image: url('imgs/myreservation.jpg');
-    background-size: cover;
-    background-position: center;
-    min-height: 1000px;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-}
-nav {
-            background-color: #333; /* Background color of the navigation bar */
-            overflow: hidden; /* Ensures proper rendering of the bar */
-        }
-
-        nav a {
-            float: right; /* Aligns the links horizontally */
-            display: block; /* Makes the links block elements */
-            color: white; /* Text color */
-            text-align: center; /* Centers the text */
-            padding: 14px 16px; /* Padding around the links */
-            text-decoration: none; /* Removes default underline */
-        }
-        nav button{
-            background-color: #333;
-            color: white;
-        }
-
-        nav a:hover {
-            background-color: #ddd; /* Background color on hover */
-            color: black; /* Text color on hover */
-        }
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!-- font awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+        
+        
+        <style>
+       
 
 .edit-btn, .cancel-btn {
     background-color: #f44336;
@@ -90,19 +68,51 @@ nav {
     margin-left: auto;
     margin-right: auto;
 }
+header{
+                background: url(imgs/myreservation.jpg);
+
+            background-size: cover;
+            background-position:center ;
+            min-height: 1000px;
+        }
+        .image-with-text {
+            display: flex!important;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        @media screen and (max-width:670px){
+            header{
+                min-height: 500px;
+            }
+            
+        }
     </style>
 </head>
 <body>
-<nav>
-        <a href="customer.php">Home</a>
-        <a>
-            <form action="logout.php" method="post" class="logout-form">
+    <header>
+<nav class="nav-wrapper transparent" >
+                <div class="container">
+                <a href="#" class="brand-logo " style="color: white" >My Reservations</a>
+                <a href="#" data-target="mobile-links" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class ="right hide-on-med-and-down">
+            <li><a href="reservation.php"class="btn">Make a Reservation</a></li>
+            <li><a href="myreservations.php"class="btn">My Reservations</a></li>
+            <li><a href="billpage.php"class="btn">View Bill</a></li>
+            <li><form action="logout.php" method="post" class="logout-form">
                 <button type="submit" class="btn">Logout</button>
-            </form></a>
-        <h1 style ="color:white">My Reservations</h1>
-
-        <!-- You can add more navigation links if needed -->
-    </nav>
+            </form></li>
+            </ul>     
+            <ul class="sidenav" id="mobile-links">
+                <li><a href="reservation.php"class="btn">Make a Reservation</a></li>
+            <li><a href="myreservations.php"class="btn">My Reservations</a></li>
+            <li><a href="billpage.php"class="btn">View Bill</a></li>
+            <li><form action="logout.php" method="post" class="logout-form">
+                <button type="submit" class="btn">Logout</button>
+            </form></li>
+                </ul>  
+         </div>
+        </nav>
     <div class="reservation-list">
         <a href="customer.php">Go Back</a>
         <?php
@@ -120,6 +130,8 @@ nav {
                 // Handle cancellation logic here (e.g., delete the reservation from the database)
                 $cancel_sql = "DELETE FROM Reservations WHERE id_Reservation = '$reservation_id' AND fk_Customerid_User = '$user_id'";
                 if ($conn->query($cancel_sql) === TRUE) {
+                    header("Location: myreservations.php");
+                    exit();
                     echo "<p>Reservation canceled successfully.</p>";
                 } else {
                     echo "<p>Error canceling reservation: " . $conn->error . "</p>";
@@ -152,26 +164,11 @@ nav {
                     echo "<td>" . $row['check_in_date'] . "</td>";
                     echo "<td>" . $row['check_out_date'] . "</td>";
                     echo "<td><img src='imgs/" . $row['image'] . "' alt='" . $row['image'] . "'></td>";
-                   // echo "<td>" . $row['room_number'] . "</td>";
                     echo "<td>" . $row['type'] . "</td>";
-                    //echo "<td>" . $row['requested_service']  . "</td>";
-                    if (isset($_POST['edit_service'])) {
-                        $reservation_id = $_POST['reservation_id'];
-                        $selected_service = $_POST['requested_service'];
-                
-                        // Update the requested_service field in the Reservations table
-                        $update_service_sql = "UPDATE Reservations SET requested_service = '$selected_service' WHERE id_Reservation = '$reservation_id'";
-                        
-                        if ($conn->query($update_service_sql) === TRUE) {
-                            echo "<p>Service updated successfully.</p>";
-                        header("Refresh:1;url=myreservations.php");
-                        } else {
-                            echo "<p>Error updating service: " . $conn->error . "</p>";
-                        }
-                    }
+                   
                     $services = array('car service', 'extra bed', 'room clean');
                     echo "<td>" ;
-                    echo "<form method='POST'>";
+                    echo "<form method='POST'action='request.php'>";
                     echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
                     echo "<select name='requested_service'>";
                     echo "<option value=''>Select service</option>";
@@ -209,5 +206,15 @@ nav {
         }
         ?>
     </div>
+    </header>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
 </html>
+

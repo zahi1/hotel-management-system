@@ -218,7 +218,8 @@
     function closeModal() {
         modal.style.display = 'none';
     }
-    document.querySelector('form').addEventListener('submit', function(event) {
+    
+    document.querySelector('#reservationForm').addEventListener('submit', function(event) {
         const checkInDate = new Date(document.getElementById('check_in_date').value);
         const checkOutDate = new Date(document.getElementById('check_out_date').value);
 
