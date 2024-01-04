@@ -44,7 +44,7 @@
             echo '<td>';
             echo '<input type="hidden" name="room_number" value="'.$row['room_number'].'">';
             echo '<button type="submit" name="edit" onclick="return confirm(\'Are you sure you want to save changes?\')">Save</button>';
-            echo '<button type="submit" name="delete" onclick="return confirm(\'Are you sure you want to delete this room?\')">Delete</button>';
+            //echo '<button type="submit" name="delete" onclick="return confirm(\'Are you sure you want to delete this room?\')">Delete</button>';
             echo '</td>';
             echo '</tr>';
             echo '</form>';
@@ -69,6 +69,7 @@
     echo 'Air Conditioning: <input type="text" name="air_conditioning" required><br>';
     echo 'Coffee Maker: <input type="text" name="coffee_maker" required><br>';
     echo 'Status: <input type="text" name="status" required><br>';
+    echo 'Image: <input type="text" name="image" required><br>';
     echo '<input type="submit" name="addRoom" value="Save">';
     echo '</form>';
     echo '</div>';
@@ -120,51 +121,23 @@ if (isset($_POST['addRoom'])) {
     $air_conditioning = $_POST['air_conditioning'];
     $coffee_maker = $_POST['coffee_maker'];
     $status = $_POST['status'];
+    $image = $_POST['image'];
 
     // Retrieve admin_id from the session
     if (isset($_SESSION['user_id'])) {
         $admin_id = $_SESSION['user_id'];
 
         // Insert the new room record using the admin_id from the session
-        $addQuery = "INSERT INTO rooms (fk_Administratorid_User, start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status) VALUES ('$admin_id', '$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status')";
+        $addQuery = "INSERT INTO rooms (fk_Administratorid_User, start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status,image) 
+        VALUES ('$admin_id', '$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status','$image')";
         
         // Execute the SQL query
         if ($conn->query($addQuery) === TRUE) {
             echo "New room added successfully.";
+            refreshPage();
         } else {
             echo "Error adding room: " . $conn->error;
-
-    
-        if (isset($_POST['addRoom'])) {
-            $start_date = $_POST['start_date'];
-            $room_number = $_POST['room_number'];
-            $type = $_POST['type'];
-            $price = $_POST['price'];
-            $size = $_POST['size'];
-            $maximum_occupancy = $_POST['maximum_occupancy'];
-            $room_view = $_POST['room_view'];
-            $air_conditioning = $_POST['air_conditioning'];
-            $coffee_maker = $_POST['coffee_maker'];
-            $status = $_POST['status'];
-            $user_id = $_SESSION['user_id'];
-    
-            $addQuery = "INSERT INTO rooms (start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status,fk_Administratorid_User ) VALUES ('$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status','$user_id')";
-    
-            if ($conn->query($addQuery) === TRUE) {
-                echo "New room added successfully.";
-                refreshPage();
-            } else {
-                echo "Error adding room: " . $conn->error;
-            }
-        
-
-        // Refresh the page after the operation
-        echo "<script>location.reload();</script>";
-    } else {
-        // Handle the case where admin_id is not set in the session
-        echo "Admin ID not found in session.";
-    }
-}
+        }
 }
 }
 

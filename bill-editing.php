@@ -49,48 +49,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
 <html>
 <head>
     <title>Edit Unpaid Bills</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <style>
+        header {
+            background-size: cover;
+            background-position: center;
+            min-height: 1000px;
+        }
+        .image-with-text {
+            display: flex!important;
+            flex-direction: column;
+            align-items: center;
+        }
+        @media screen and (max-width:670px) {
+            header {
+                min-height: 500px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Edit Unpaid Bills</h2>
-    <table>
-        <tr>
-            <th>Bill ID</th>
-            <th>Date Generated</th>
-            <th>Bill Amount</th>
-            <th>Customer Details</th>
-            <th>Modify</th>
-        </tr>
-        <?php foreach ($billsData as $bill): ?>
-            <tr>
-                <form action="bill-editing.php" method="post" onsubmit="return confirm('Are you sure you want to update this bill?')">
-                    <td><?php echo $bill['id_Bill']; ?></td>
-                    <td>
-                        <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
-                        <input type="datetime-local" name="date_generated" value="<?php echo $bill['date_generated']; ?>" required>
-                    </td>
-                    <td>
-                        <input type="text" name="bill_amount" value="<?php echo $bill['bill_amount']; ?>" required>
-                    </td>
-                    <td>
-                        <input type="hidden" name="customer_id" value="<?php echo $bill['customer_id']; ?>">
-                        <span>ID: <?php echo $bill['customer_id']; ?></span><br>
-                        <span>Name: <?php echo substr($bill['customer_name'], strpos($bill['customer_name'], '-') + 1); ?></span>
-                    </td>
-                    <td>
-                        <?php if ($userid == $bill['fk_Employeeid_User']): ?>
-                            <input type="submit" value="Update">
-                        <?php else: ?>
-                            Not authorized
-                        <?php endif; ?>
-                    </td>
-                </form>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="employee.php" class="brand-logo">Employee</a>
+            </div>
+        </nav>
 
-    <form action="Bill-form.php">
-        <button type="submit">Back</button>
-    </form>
+        <div class="container">
+            <h2>Edit Unpaid Bills</h2>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Bill ID</th>
+                        <th>Date Generated</th>
+                        <th>Bill Amount</th>
+                        <th>Customer Details</th>
+                        <th>Modify</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($billsData as $bill): ?>
+                        <tr>
+                            <form action="bill-editing.php" method="post" onsubmit="return confirm('Are you sure you want to update this bill?')">
+                                <td><?php echo $bill['id_Bill']; ?></td>
+                                <td>
+                                    <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
+                                    <input type="datetime-local" name="date_generated" value="<?php echo $bill['date_generated']; ?>" required>
+                                </td>
+                                <td>
+                                    <input type="text" name="bill_amount" value="<?php echo $bill['bill_amount']; ?>" required>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="customer_id" value="<?php echo $bill['customer_id']; ?>">
+                                    <span>ID: <?php echo $bill['customer_id']; ?></span><br>
+                                    <span>Name: <?php echo substr($bill['customer_name'], strpos($bill['customer_name'], '-') + 1); ?></span>
+                                </td>
+                                <td>
+                                    <?php if ($userid == $bill['fk_Employeeid_User']): ?>
+                                        <button type="submit" class="btn">Update</button>
+                                    <?php else: ?>
+                                        <span>Not authorized</span>
+                                    <?php endif; ?>
+                                </td>
+                            </form>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <form action="Bill-form.php">
+                <button type="submit" class="btn">Back</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 </body>
 </html>

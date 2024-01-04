@@ -8,13 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['username'] =$username;
 
     // Check if the username exists in any of the tables based on id_User
-    $sql = "(SELECT 'admin' AS role, id_User FROM Administrators WHERE id_User = 
+    $sql = "(SELECT 'admin' AS role, id_User,email FROM Administrators WHERE id_User = 
                 (SELECT id_User FROM Users WHERE Login = '$username'))
              UNION
-             (SELECT 'customer' AS role, id_User FROM Customers WHERE id_User = 
+             (SELECT 'customer' AS role, id_User,email_address AS email FROM Customers WHERE id_User = 
                 (SELECT id_User FROM Users WHERE Login = '$username'))
              UNION
-             (SELECT 'employee' AS role, id_User FROM Employees WHERE id_User = 
+             (SELECT 'employee' AS role, id_User,contact_information AS email FROM Employees WHERE id_User = 
                 (SELECT id_User FROM Users WHERE Login = '$username'))";
     
     $result = $conn->query($sql);
@@ -24,9 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $row = $result->fetch_assoc();
         $_SESSION['user_id'] = $row['id_User'];
         $_SESSION['role'] = $row['role'];
+        $_SESSION['email'] = $row['email'];
 
         switch ($_SESSION['role']) {
             case 'admin':
+
                 sleep(1);
                 header("Location: admin.php");
                 break;

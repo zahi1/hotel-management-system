@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_reservation'])
     // Retrieve guest name and number of guests from the form
     $guest_name = $_POST['guest_name'];
     $number_of_guests = $_POST['number_of_guests'];
-    
+    $customer_email = $_SESSION['email'];
     // Insert the reservation details into the Reservations table
     $insert_reservation_sql = "INSERT INTO Reservations (check_in_date, check_out_date, fk_Roomroom_number, fk_Customerid_User, guest_name, number_of_guests) VALUES ('$check_in_date', '$check_out_date', '$selected_room_number', '$user_id', '$guest_name', '$number_of_guests')";
     
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_reservation'])
                 // Recipient
                 $to = 'vimalrajvarunjosh@gmail.com'; 
                 $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); 
-                $mail->addAddress($to);
+                $mail->addAddress($customer_email);
 
                 // Email content
                 $mail->isHTML(false); 
