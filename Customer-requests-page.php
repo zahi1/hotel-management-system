@@ -30,7 +30,7 @@ $employees_result = $conn->query($employees_sql);
 </head>
 <body>
 <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper blue-grey darken-4">
             <a href="employee.php" class="brand-logo">Service Requests</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="employee.php">Back</a></li>
@@ -75,5 +75,13 @@ $employees_result = $conn->query($employees_sql);
         ?>
     </table>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+    </script>
 </html>
 

@@ -159,11 +159,11 @@ header{
                       </tr>";
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . $row['id_Reservation'] . "</td>";
-                    echo "<td>" . $row['check_in_date'] . "</td>";
-                    echo "<td>" . $row['check_out_date'] . "</td>";
+                    echo "<td><h4>" . $row['id_Reservation'] . "</h4></td>";
+                    echo "<td><h4>" . $row['check_in_date'] . "</h4></td>";
+                    echo "<td><h4>" . $row['check_out_date'] . "</h4></td>";
                     echo "<td><img src='imgs/" . $row['image'] . "' alt='" . $row['image'] . "'></td>";
-                    echo "<td>" . $row['type'] . "</td>";
+                    echo "<td><h4>" . $row['type'] . "</h4></td>";
                    
                     $services = array('car service', 'extra bed', 'room clean');
                     echo "<td>" ;
