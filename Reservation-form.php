@@ -3,7 +3,7 @@ session_start();
 
 $userid = $_SESSION['user_id'];
 
-include 'db.php'; // Database connection file
+include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_id'], $_POST['status'])) {
     // Retrieve modified form data
@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reservation_id'], $_P
         echo "Reservation updated successfully!";
         // Redirect to employee.php after successful update
         header("Location: employee.php");
+        sleep(1);
         exit(); // Ensure that code execution stops after redirection
     } else {
         echo "Error updating reservation: " . $conn->error;

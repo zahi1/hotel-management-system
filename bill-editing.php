@@ -3,7 +3,7 @@ session_start();
 
 $userid = $_SESSION['user_id'];
 
-include 'db.php'; // Database connection file
+include 'db.php'; 
 
 // Fetch unpaid bills from the database with customer information
 $sql = "SELECT b.id_Bill, b.date_generated, b.bill_amount, c.id_User AS customer_id, CONCAT(c.id_User, '-', c.firstname) AS customer_name, b.fk_Employeeid_User
@@ -19,7 +19,7 @@ if ($result && $result->num_rows > 0) {
         $billsData[] = $row;
     }
 } else {
-    echo "No Bills to edit!";
+    echo "No bills !";
     exit; // Exit if no unpaid bills are found
 }
 
@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
 
     if ($conn->query($update_sql) === TRUE) {
         header("Location: Bill-form.php");
+        sleep(1);
         exit;
     } else {
         echo "Error updating bill: " . $conn->error;
