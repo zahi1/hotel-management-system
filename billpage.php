@@ -6,22 +6,11 @@ include 'db.php'; // Database connection file
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['amount'])) {
     $bill_id = $_POST['bill_id'];
     $amount = $_POST['amount'];
+    $_SESSION['bill_id'] = $bill_id;
 
-    // Store the payment details in the database
-    $insert_sql = "INSERT INTO payments (amount, date_time, fk_Customerid_User, status) VALUES ('$amount', NOW(), '$userid', 'paid')";
-    if ($conn->query($insert_sql) === TRUE) {
-        // Update status in bills table
-        $update_sql = "UPDATE bills SET status = 'paid' WHERE id_Bill = $bill_id";
-        if ($conn->query($update_sql) === TRUE) {
-            // Proceed to payment processing using Stripe
-            header("Location: checkout.php?bill_id=$bill_id&amount=$amount");
-            exit();
-        } else {
-            echo "Error updating status: " . $conn->error;
-        }
-    } else {
-        echo "Error: " . $conn->error;
-    }
+    // Proceed to payment processing using Stripe
+    header("Location: checkout.php?bill_id=$bill_id&amount=$amount");
+    exit();
 }
 
 // Fetch unpaid bills of the logged-in customer
