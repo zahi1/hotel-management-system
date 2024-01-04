@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <label for="employment_start_date">Employment Start Date:</label>
         <input type="date" name="employment_start_date" required><br>
 
-        <label for="contact_information">Contact Information:</label>
+        <label for="contact_information">Email Address:</label>
         <input type="text" name="contact_information" required><br>
 
         <label for="salary">Salary:</label>
