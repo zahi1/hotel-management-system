@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Delete Unpaid Bills</title>
+    <title>Delete Bills</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Compiled and minified CSS -->
