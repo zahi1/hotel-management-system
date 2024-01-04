@@ -37,28 +37,48 @@ if (isset($_POST['update_employee'])) {
     $name = $_POST['name'];
     $surname = $_POST['surname'];
     $position = $_POST['position'];
+    // Add new fields
+    $contact_information = $_POST['contact_information'];
+    $salary = $_POST['salary'];
+    $working_hours = $_POST['working_hours'];
+    $office_number = $_POST['office_number'];
+    $address = $_POST['address'];
 
     // Show confirmation message for update
     echo "<script>
             var confirmUpdate = confirm('Are you sure you want to update this employee?');
             if (confirmUpdate) {
-                window.location.href = 'Employee-list.php?update_employee=$id_User&name=$name&surname=$surname&position=$position';
+                window.location.href = 'Employee-list.php?update_employee=$id_User&name=$name&surname=$surname&position=$position&contact_information=$contact_information&salary=$salary&working_hours=$working_hours&office_number=$office_number&address=$address';
             }
           </script>";
 }
 
 // Check if the form is submitted for deleting via confirmation link
+// Check if the form is submitted for deleting via confirmation link
 if (isset($_GET['delete_employee'])) {
     $id_User = $_GET['delete_employee'];
 
-    // Remove employee from the database
-    $remove_query = "DELETE FROM employees WHERE id_User = ?";
-    $stmt = mysqli_prepare($conn, $remove_query);
-    mysqli_stmt_bind_param($stmt, "i", $id_User);
-    $remove_result = mysqli_stmt_execute($stmt);
+    // Remove employee from both tables
+    $remove_employee_query = "DELETE FROM employees WHERE id_User = ?";
+    $remove_user_query = "DELETE FROM users WHERE id_User = ?";
+    
+    // Using a transaction to ensure both queries are executed or none
+    mysqli_autocommit($conn, false);
 
-    if (!$remove_result) {
-        die("Remove query failed: " . mysqli_error($conn));
+    $stmt_employee = mysqli_prepare($conn, $remove_employee_query);
+    mysqli_stmt_bind_param($stmt_employee, "i", $id_User);
+
+    $stmt_user = mysqli_prepare($conn, $remove_user_query);
+    mysqli_stmt_bind_param($stmt_user, "i", $id_User);
+
+    $remove_employee_result = mysqli_stmt_execute($stmt_employee);
+    $remove_user_result = mysqli_stmt_execute($stmt_user);
+
+    if ($remove_employee_result && $remove_user_result) {
+        mysqli_commit($conn);
+    } else {
+        mysqli_rollback($conn);
+        die("Remove queries failed: " . mysqli_error($conn));
     }
 
     // Redirect to the same page to refresh the employee list
@@ -72,11 +92,17 @@ if (isset($_GET['update_employee'])) {
     $name = $_GET['name'];
     $surname = $_GET['surname'];
     $position = $_GET['position'];
+    // Retrieve new fields
+    $contact_information = $_GET['contact_information'];
+    $salary = $_GET['salary'];
+    $working_hours = $_GET['working_hours'];
+    $office_number = $_GET['office_number'];
+    $address = $_GET['address'];
 
     // Update employee data in the database
-    $update_query = "UPDATE employees SET name=?, surname=?, position=? WHERE id_User = ?";
+    $update_query = "UPDATE employees SET name=?, surname=?, position=?, contact_information=?, salary=?, working_hours=?, office_number=?, address=? WHERE id_User = ?";
     $stmt = mysqli_prepare($conn, $update_query);
-    mysqli_stmt_bind_param($stmt, "sssi", $name, $surname, $position, $id_User);
+    mysqli_stmt_bind_param($stmt, "ssssssssi", $name, $surname, $position, $contact_information, $salary, $working_hours, $office_number, $address, $id_User);
     $update_result = mysqli_stmt_execute($stmt);
 
     if (!$update_result) {
@@ -115,6 +141,12 @@ if (!$result) {
         <th>Name</th>
         <th>Surname</th>
         <th>Position</th>
+        <!-- Add new table headers for the additional fields -->
+        <th>Contact Information</th>
+        <th>Salary</th>
+        <th>Working Hours</th>
+        <th>Office Number</th>
+        <th>Address</th>
         <th>Edit</th>
         <th>Delete</th>
     </tr>
@@ -125,6 +157,12 @@ if (!$result) {
         echo "<td>{$row['name']}</td>";
         echo "<td>{$row['surname']}</td>";
         echo "<td>{$row['position']}</td>";
+        // Display values for the new fields
+        echo "<td>{$row['contact_information']}</td>";
+        echo "<td>{$row['salary']}</td>";
+        echo "<td>{$row['working_hours']}</td>";
+        echo "<td>{$row['office_number']}</td>";
+        echo "<td>{$row['address']}</td>";
         echo "<td>
                 <form method='post'>
                     <input type='hidden' name='edit_employee' value='{$row['id_User']}'>
@@ -152,6 +190,12 @@ if (isset($edit_row)) {
         Name: <input type="text" name="name" value="<?php echo $edit_row['name']; ?>" required><br>
         Surname: <input type="text" name="surname" value="<?php echo $edit_row['surname']; ?>" required><br>
         Position: <input type="text" name="position" value="<?php echo $edit_row['position']; ?>" required><br>
+        <!-- Add new input fields for the additional fields -->
+        Contact Information: <input type="text" name="contact_information" value="<?php echo $edit_row['contact_information']; ?>" required><br>
+        Salary: <input type="text" name="salary" value="<?php echo $edit_row['salary']; ?>" required><br>
+        Working Hours: <input type="text" name="working_hours" value="<?php echo $edit_row['working_hours']; ?>" required><br>
+        Office Number: <input type="text" name="office_number" value="<?php echo $edit_row['office_number']; ?>" required><br>
+        Address: <input type="text" name="address" value="<?php echo $edit_row['address']; ?>" required><br>
         <button type="submit" name="update_employee">Update Employee</button>
     </form>
     <?php
