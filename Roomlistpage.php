@@ -74,13 +74,17 @@ if (isset($_POST['similar'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <title>Select Room</title>
 </head>
 <body>
     <h1>Select Room</h1>
+    <button onclick="redirectToAdminPage()">Home</button>
 
     <form action="" method="post">
+    
+    <br><br>
         <table border="1">
             <tr>
                 <th>Select</th>
@@ -114,18 +118,23 @@ if (isset($_POST['similar'])) {
         </table>
 
         <!-- Buttons for actions -->
-        <input type="button" name="assign" value="Assign Room" onclick="redirectToRoomForm()">
+        
         <input type="submit" name="remove" value="Remove Room" onclick="return confirm('Are you sure you want to remove this room?');">
         <input type="submit" name="unassign" value="Unassign Room" onclick="return confirmUnassign();">
-        <input type="button" name="update" value="Update Room" onclick="redirectToRoomForm()">
+       
         <input type="submit" name="similar" value="Show Similar Room">
-        <input type="submit" name="clear" value="Clear Selection">
+        <br><br>
+        <input type="button" name="assign" value="Room Form" onclick="redirectToRoomForm()">
+        
+        
 
         <!-- Display Similar Rooms -->
         <?php if (!empty($similarRooms)): ?>
+            
             <h2>Similar Rooms</h2>
             <table border="1">
                 <tr>
+                
                     <th>Room Number</th>
                     <th>Type</th>
                     <th>Price</th>
@@ -154,7 +163,7 @@ if (isset($_POST['similar'])) {
             <p>No similar rooms found for the selected room view.</p>
         <?php endif; ?>
     </form>
-    <button onclick="redirectToAdminPage()">Home</button>
+    
 
     <!-- Include any other scripts or styles if necessary -->
     <script>
