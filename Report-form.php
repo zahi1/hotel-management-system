@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor1/autoload.php';
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
@@ -29,15 +32,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $customer_name = $conn->real_escape_string($_POST['customer_name']);
     $date_time = $_POST['date_time'];
     $bill_amount = $_POST['bill_amount'];
-    $service_id = $_POST['service_id'];
-
-    $insertSQL = "INSERT INTO Reports (customer_name, date_time, creator, bill_amount, fk_Employeeid_User, services)
+    if (isset( $_POST['service_id'])) {
+        $service_id = $_POST['service_id'];
+        $insertSQL = "INSERT INTO Reports (customer_name, date_time, creator, bill_amount, fk_Employeeid_User, services)
                   VALUES (?, ?, ?, ?, ?, ?)";
 
     if ($stmt = $conn->prepare($insertSQL)) {
         $stmt->bind_param("sssdii", $customer_name, $date_time, $userid, $bill_amount, $userid, $service_id);
 
         if ($stmt->execute()) {
+            $mail = new PHPMailer(true);
+
+            try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; // SMTP server
+                $mail->SMTPAuth = true;
+                $mail->Username = 'hms2024KTU@gmail.com'; // SMTP username
+                $mail->Password = 'eafn vdab zcpl ergc'; 
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
+
+                // Recipient
+                $to = 'zahihelouzh@gmail.com'; 
+                $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); 
+                $mail->addAddress($to);
+
+                // Email content
+                $mail->isHTML(false); 
+                $mail->Subject = 'Reservation Confirmation';
+                $mail->Body = 'Dear Customer, Your reservation has been confirmed.';
+
+                // Send email
+                if ($mail->send()) {
+                    //echo "Email sent successfully to $to";
+                } else {
+                    echo "Failed to send email to $to. Error: {$mail->ErrorInfo}";
+                }
+            } catch (Exception $e) {
+                echo "Mailer Error: {$mail->ErrorInfo}";
+            }
+
             echo "Report created successfully!";
         } else {
             echo "Error in insertion: " . $stmt->error;
@@ -47,6 +82,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error: Unable to prepare statement";
     }
+    }else{
+        $insertSQL = "INSERT INTO Reports (customer_name, date_time, creator, bill_amount, fk_Employeeid_User)
+                  VALUES (?, ?, ?, ?, ?)";
+
+    if ($stmt = $conn->prepare($insertSQL)) {
+        $stmt->bind_param("sssdi", $customer_name, $date_time, $userid, $bill_amount, $userid);
+
+        if ($stmt->execute()) {
+            $mail = new PHPMailer(true);
+
+            try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; // SMTP server
+                $mail->SMTPAuth = true;
+                $mail->Username = 'hms2024KTU@gmail.com'; // SMTP username
+                $mail->Password = 'eafn vdab zcpl ergc'; 
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
+
+                // Recipient
+                $to = 'zahihelouzh@gmail.com'; 
+                $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); 
+                $mail->addAddress($to);
+
+                // Email content
+                $mail->isHTML(false); 
+                $mail->Subject = 'Reservation Confirmation';
+                $mail->Body = 'Dear Customer, Your reservation has been confirmed.';
+
+                // Send email
+                if ($mail->send()) {
+                    //echo "Email sent successfully to $to";
+                } else {
+                    echo "Failed to send email to $to. Error: {$mail->ErrorInfo}";
+                }
+            } catch (Exception $e) {
+                echo "Mailer Error: {$mail->ErrorInfo}";
+            }
+            echo "Report created successfully!";
+        } else {
+            echo "Error in insertion: " . $stmt->error;
+        }
+
+        $stmt->close();
+    } else {
+        echo "Error: Unable to prepare statement";
+    }
+
+    }
+    
+
+    
 }
 
 $conn->close();
@@ -86,7 +174,7 @@ $conn->close();
             <input type="number" id="bill_amount" name="bill_amount" required><br><br>
 
             <label for="service_id">Service Type:</label>
-            <select id="service_id" name="service_id" required>
+            <select id="service_id" name="service_id" >
                 <?php echo $serviceOptions; ?>
             </select><br><br>
 

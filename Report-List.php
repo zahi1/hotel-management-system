@@ -10,7 +10,11 @@ include 'db.php';
 
 // Handle POST request for updating or deleting a report
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $reportId = $_POST['id_Report'];
+
+
+   
 
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
         // SQL to delete report
@@ -21,21 +25,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<p>Error deleting report: " . $conn->error . "</p>";
         }
     } else {
-        // Update logic
+        // Update logic 
         $customer_name = $conn->real_escape_string($_POST['customer_name']);
         $date_time = $_POST['date_time']; // Format and sanitize
         $bill_amount = $_POST['bill_amount'];
         $services = $conn->real_escape_string($_POST['services']);
 
-        $updateSQL = "UPDATE Reports SET customer_name = '$customer_name', date_time = '$date_time', bill_amount = '$bill_amount', services = '$services' WHERE id_Report = $reportId";
+        $updateSQL = "UPDATE Reports SET customer_name = '$customer_name', date_time = '$date_time', bill_amount = '$bill_amount', services = '$services' 
+        WHERE id_Report = $reportId";
 
         if ($conn->query($updateSQL) === TRUE) {
             echo "<p>Report updated successfully!</p>";
         } else {
             echo "<p>Error updating report: " . $conn->error . "</p>";
         }
-    }
+        
 }
+    }
+
 
 // Fetch all reports
 $query = "SELECT * FROM Reports"; // Adjust the query as needed
@@ -86,7 +93,12 @@ $result = $conn->query($query);
             echo "<input type='hidden' name='id_Report' value='$reportId'>";
             echo "<input type='hidden' name='action' value='delete'>";
             echo "<input type='submit' value='Remove'>";
+
             echo "</form>";
+            echo '<form method="POST" action="Report-List.php">';
+            echo "<input type='hidden' name='id_Report' value='$reportId'>";
+
+           
             echo "</td>";
             echo "</tr>";
 
@@ -103,6 +115,7 @@ $result = $conn->query($query);
             echo "</form>";
             echo "</td>";
             echo "</tr>";
+
         }
         ?>
     </table>
