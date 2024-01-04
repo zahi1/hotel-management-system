@@ -16,11 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Extract service details
             $service_type = $reservation_data['requested_service'];
             $service_price = 0; // You might retrieve this from somewhere else
-            $service_availability = 1; // Assuming service is now available
 
             // Insert new row into services table
-            $insert_service_sql = "INSERT INTO services (service_type, service_price, service_availability, fk_Reservationid_Reservation, fk_Employee_ID) 
-                                   VALUES ('$service_type', $service_price, $service_availability, $reservation_id, $assigned_employee)";
+            $insert_service_sql = "INSERT INTO services (service_type, service_price, fk_Reservationid_Reservation, fk_Employee_ID) 
+                                   VALUES ('$service_type', $service_price, $reservation_id, $assigned_employee)";
             
             $insert_result = $conn->query($insert_service_sql);
 

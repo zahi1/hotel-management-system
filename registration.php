@@ -17,18 +17,28 @@
 </head>
 <body>
     <h2>Register</h2>
-    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="centre">
+    <div class="input-field col s12">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
+        </div>
+        <div class="input-field col s12">
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br><br>
+        </div>
+        <div class="input-field col s12">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br><br>
+        </div>
+        <div class="input-field col s12">
         <label for="phone_number">Phone Number:</label>
         <input type="text" id="phone_number" name="phone_number" required><br><br>
+        </div>
+        <div class="input-field col s12">
         <label for="billing_address">Billing Address:</label>
         <input type="text" id="billing_address" name="billing_address" required><br><br>
-        <input type="submit" value="Register">
+        </div>
+        <input type="submit" class="waves-effect waves-light btn" value="Register">
     </form>
 
     <?php
