@@ -9,7 +9,8 @@ $amount = $_GET['amount'];
 
 $checkout_session = \Stripe\Checkout\Session::create([
     "mode" => "payment",
-    "success_url" => "http://localhost/hotelmanagementsystem/success.php",
+    "success_url" => "http://localhost/IS/master/success.php",
+    "cancel_url" => "http://localhost/IS/master/customer.php",
     "payment_method_types" => ["card"],
     "line_items" => [
         [
