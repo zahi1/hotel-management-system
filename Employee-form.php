@@ -53,16 +53,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
-                // Recipient
-                $to = 'vimalrajvarunjosh@gmail.com'; 
-                $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); 
-                $mail->addAddress($to);
+                // Recipient 
+                $mail->setFrom('hms2024KTU@gmail.com', 'HMS'); 
+                $mail->addAddress($contact_information);
 
                 // Email content
                 $mail->isHTML(false); 
-                $mail->Subject = 'Reservation Confirmation';
-                $mail->Body = 'Dear Employee,WELCOME!!.';
-
+                $mail->Subject = 'Joining Credentials';
+                //$mail->Body = 'Dear Employee,WELCOME!!.';
+                //$row = $result->fetch_assoc();
+                $Credentials = "Username: " . $employee_username. "\n";
+                $Credentials .= "Password: " .$employee_password  . "\n";
+    
+                $mail->Body = 'Dear Employee, WELCOME!!' . $Credentials; // Your email message
                 // Send email
                 if ($mail->send()) {
                     //echo "Email sent successfully to $to";
