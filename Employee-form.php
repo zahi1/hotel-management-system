@@ -77,9 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php unset($_SESSION['error_message']); ?>
     <?php endif; ?>
 
-    <form action="Employee-form.php" method="post">
-        <!-- Form fields go here -->
-        <label for="name">Name:</label>
+    <form action="Employee-form.php" method="post" onsubmit="return confirmAddEmployee()">
+         <!-- Form fields go here -->
+         <label for="name">Name:</label>
         <input type="text" name="name" required><br>
 
         <label for="surname">Surname:</label>
@@ -117,5 +117,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <button type="submit">Add Employee</button>
     </form>
+
+    <script>
+        function confirmAddEmployee() {
+            return confirm("Are you sure you want to add this employee?");
+        }
+    </script>
 </body>
 </html>
