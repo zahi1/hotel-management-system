@@ -11,9 +11,9 @@ if (isset($_SESSION['bill_id'])) {
 
     // Execute the update statement
     if ($update_stmt->execute()) {
-        echo "<p>Bill ID: $bill_id has been successfully paid.</p>";
+        //echo "<p>Bill ID: $bill_id has been successfully paid.</p>";
     } else {
-        echo "<p>Error updating bill status: " . $conn->error . "</p>";
+        //echo "<p>Error updating bill status: " . $conn->error . "</p>";
     }
 
     // Close the prepared statement
@@ -27,12 +27,17 @@ if (isset($_SESSION['bill_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!-- font awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <title>Payment Success</title>
 </head>
 <body>
     <h1>Thank you for your payment</h1>
-    <form action="customer.php">
-        <button type="submit">Back</button>
-    </form>
+    <a href="customer.php">Click to Go Back</a>
 </body>
 </html>
