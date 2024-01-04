@@ -20,14 +20,23 @@ $employees_result = $conn->query($employees_sql);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Service Requests</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Additional styles or frameworks as needed -->
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!-- font awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
 </head>
 <body>
-    <a href="employee.php">Back</a>
-    <h1>Service Requests</h1>
+<nav>
+        <div class="nav-wrapper">
+            <a href="employee.php" class="brand-logo">Service Requests</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="employee.php">Back</a></li>
+            </ul>
+        </div>
+    </nav>
     <table>
         <tr>
             <th>Reservation ID</th>

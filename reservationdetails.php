@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Reservation</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles1.css">
 </head>
 <body>
     <div class="edit-reservation">
         <h1>Edit Reservation</h1>
-        <a href="myreservations.php">Go Back</a>
+        <a href="myreservations.php" >Go Back</a>
         <?php
         session_start();
         include 'db.php'; // Include your database connection

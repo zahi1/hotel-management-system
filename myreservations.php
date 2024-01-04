@@ -1,54 +1,18 @@
-<?php
-        session_start();
-        include 'db.php'; 
-        ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My Reservations</title>
-    <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
         <!-- font awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-    <style>
         
-
-.reservation-list {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.reservations-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.reservations-table th, .reservations-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-.reservations-table th {
-    background-color: black ;
-}
-
-.reservations-table img {
-    display: block;
-    width: 100px;
-    height: auto;
-    margin: 0 auto;
-}
+        
+        <style>
+       
 
 .edit-btn, .cancel-btn {
     background-color: #f44336;
@@ -71,16 +35,20 @@
         table {
             border-collapse: collapse;
             width: 100%;
-            font-family: Arial, sans-serif; /* Example font family */
-    color: #f4ff81 
+            
         }
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+        td{
+    font-weight: 800; /* Makes the th font double bold */
+    font-family: Arial, sans-serif; /* Example font family */
+    color: #f4ff81
+        }
         th {
-            background-color: black;
+            background-color: #f2f2f2;
         }
         .cancel-btn {
             background-color: #f44336;
@@ -102,6 +70,7 @@
 }
 header{
                 background: url(imgs/myreservation.jpg);
+
             background-size: cover;
             background-position:center ;
             min-height: 1000px;
@@ -111,7 +80,8 @@ header{
             flex-direction: column;
             align-items: center;
         }
-@media screen and (max-width:670px){
+        
+        @media screen and (max-width:670px){
             header{
                 min-height: 500px;
             }
@@ -121,32 +91,33 @@ header{
 </head>
 <body>
     <header>
-    <nav class="nav-wrapper transparent" >
+<nav class="nav-wrapper transparent" >
                 <div class="container">
-                <a href="#" class="brand-logo " style="color: black" >My Reservation</a>
+                <a href="#" class="brand-logo " style="color: white" >My Reservations</a>
                 <a href="#" data-target="mobile-links" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class ="right hide-on-med-and-down">
-            <li><a href="customer.php" class="btn">Home</a></li>
-            <li><a href="reservation.php"class="btn">Reserve a Room</a></li>
+            <li><a href="reservation.php"class="btn">Make a Reservation</a></li>
+            <li><a href="myreservations.php"class="btn">My Reservations</a></li>
             <li><a href="billpage.php"class="btn">View Bill</a></li>
             <li><form action="logout.php" method="post" class="logout-form">
                 <button type="submit" class="btn">Logout</button>
             </form></li>
             </ul>     
             <ul class="sidenav" id="mobile-links">
-            <li><a href="customer.php" class="btn">Go Back</a></li>
-            <li><a href="reservation.php"class="btn">Reserve a Room</a></li>
+                <li><a href="reservation.php"class="btn">Make a Reservation</a></li>
+            <li><a href="myreservations.php"class="btn">My Reservations</a></li>
             <li><a href="billpage.php"class="btn">View Bill</a></li>
             <li><form action="logout.php" method="post" class="logout-form">
                 <button type="submit" class="btn">Logout</button>
             </form></li>
                 </ul>  
          </div>
-        </nav><br>
+        </nav>
     <div class="reservation-list">
+        <a href="customer.php">Go Back</a>
         <?php
-        // session_start();
-        // include 'db.php'; // Include your database connection
+        session_start();
+        include 'db.php'; // Include your database connection
         
         // Check if user is logged in and get their user ID from session
         if (isset($_SESSION['user_id'])) {
@@ -159,6 +130,8 @@ header{
                 // Handle cancellation logic here (e.g., delete the reservation from the database)
                 $cancel_sql = "DELETE FROM Reservations WHERE id_Reservation = '$reservation_id' AND fk_Customerid_User = '$user_id'";
                 if ($conn->query($cancel_sql) === TRUE) {
+                    header("Location: myreservations.php");
+                    exit();
                     echo "<p>Reservation canceled successfully.</p>";
                 } else {
                     echo "<p>Error canceling reservation: " . $conn->error . "</p>";
@@ -191,26 +164,11 @@ header{
                     echo "<td>" . $row['check_in_date'] . "</td>";
                     echo "<td>" . $row['check_out_date'] . "</td>";
                     echo "<td><img src='imgs/" . $row['image'] . "' alt='" . $row['image'] . "'></td>";
-                   // echo "<td>" . $row['room_number'] . "</td>";
                     echo "<td>" . $row['type'] . "</td>";
-                    //echo "<td>" . $row['requested_service']  . "</td>";
-                    if (isset($_POST['edit_service'])) {
-                        $reservation_id = $_POST['reservation_id'];
-                        $selected_service = $_POST['requested_service'];
-                
-                        // Update the requested_service field in the Reservations table
-                        $update_service_sql = "UPDATE Reservations SET requested_service = '$selected_service' WHERE id_Reservation = '$reservation_id'";
-                        
-                        if ($conn->query($update_service_sql) === TRUE) {
-                            echo "<p>Service updated successfully.</p>";
-                        header("Refresh:1;url=myreservations.php");
-                        } else {
-                            echo "<p>Error updating service: " . $conn->error . "</p>";
-                        }
-                    }
+                   
                     $services = array('car service', 'extra bed', 'room clean');
                     echo "<td>" ;
-                    echo "<form method='POST'>";
+                    echo "<form method='POST'action='request.php'>";
                     echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
                     echo "<select name='requested_service'>";
                     echo "<option value=''>Select service</option>";
@@ -250,9 +208,18 @@ header{
     </div>
     </header>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+</script>
 <script src="/app.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script> $(document).ready(function(){ $('.sidenav').sidenav(); })</script>
 </html>
+
