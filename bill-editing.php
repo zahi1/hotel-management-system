@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
         </nav>
 
         <div class="container">
-            <h2>Edit Unpaid Bills</h2>
+            <h2>Edit Bills</h2>
             <table class="striped">
                 <thead>
                     <tr>

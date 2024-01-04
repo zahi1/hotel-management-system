@@ -60,9 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail->addAddress($to);
 
                 // Email content
-                $mail->isHTML(false); 
-                $mail->Subject = 'Reservation Confirmation';
-                $mail->Body = 'Dear Customer, Your reservation has been confirmed.';
+                $mail->isHTML(false);
+                $mail->Subject = 'Report Creation';
+                $mail->Body    = "Customer Name: $customer_name\n"
+                       . "Date and Time: $date_time\n"
+                       . "Bill Amount: $bill_amount\n"
+                       . "Service Type: $service_id\n";
 
                 // Send email
                 if ($mail->send()) {
@@ -144,7 +147,7 @@ $conn->close();
 <html>
 <head>
     <title>Report Form</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styless.css">
     <script>
         function toggleReportForm() {
             var x = document.getElementById("reportForm");
@@ -154,12 +157,19 @@ $conn->close();
                 x.style.display = "none";
             }
         }
+
+        function goBack() {
+            window.location.href = 'employee.php'; // This will take the user to the previous page
+            // Alternatively, you can direct the user to a specific page:
+            // window.location.href = 'somepage.php';
+        }
     </script>
 </head>
 <body>
     <h2>Report Management</h2>
     <button onclick="toggleReportForm()">Add a Report</button>
     <button onclick="location.href='Report-List.php'">View Reports</button>
+    <button onclick="goBack()">Back to Home Page</button> <!-- Back button -->
     <div id="reportForm" style="display:none;">
         <h3>Add Report</h3>
         <form action="" method="post">

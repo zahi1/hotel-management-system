@@ -53,7 +53,7 @@ $result = $conn->query($query);
 <html>
 <head>
     <title>View Reports</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="stylos.css">
     <script>
         function showEditForm(id) {
             var form = document.getElementById('editForm-' + id);
@@ -71,6 +71,7 @@ $result = $conn->query($query);
 </head>
 <body>
     <h2>All Reports</h2>
+    <button onclick="window.location.href='Report-form.php'">Back to Form</button>
     <table>
         <tr>
             <th>Customer Name</th>
