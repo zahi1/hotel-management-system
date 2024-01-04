@@ -1,4 +1,8 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor1/autoload.php';
+
 // Include the database connection file (replace 'your_db_connection.php' with your actual file)
 include('db.php');
 
@@ -37,6 +41,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Perform the query
         if (mysqli_query($conn, $insertEmployeeQuery)) {
+            $mail = new PHPMailer(true);
+
+            try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; // SMTP server
+                $mail->SMTPAuth = true;
+                $mail->Username = 'hms2024KTU@gmail.com'; // SMTP username
+                $mail->Password = 'eafn vdab zcpl ergc'; 
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
+
+                // Recipient
+                $to = 'vimalrajvarunjosh@gmail.com'; 
+                $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); 
+                $mail->addAddress($to);
+
+                // Email content
+                $mail->isHTML(false); 
+                $mail->Subject = 'Reservation Confirmation';
+                $mail->Body = 'Dear Employee,WELCOME!!.';
+
+                // Send email
+                if ($mail->send()) {
+                    //echo "Email sent successfully to $to";
+                } else {
+                    echo "Failed to send email to $to. Error: {$mail->ErrorInfo}";
+                }
+            } catch (Exception $e) {
+                echo "Mailer Error: {$mail->ErrorInfo}";
+            }
             // Employee added successfully
             header('Location: Employee-form.php?success=1'); // Redirect to employee form page with success flag
             exit();
