@@ -62,10 +62,9 @@
         $lastname = $_POST['lastname'];
 
         // Hash the password
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Insert into Users table
-        $sql = "INSERT INTO Users (Login, Password) VALUES ('$username', '$hashed_password')";
+        $sql = "INSERT INTO Users (Login, Password) VALUES ('$username', '$password')";
         if ($conn->query($sql) === TRUE) {
             $user_id = $conn->insert_id;
 

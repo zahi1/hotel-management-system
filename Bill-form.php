@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="employee.php" class="brand-logo">Employee</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="bill-editing.php">Edit Bill</a></li>
-                <li><a href="bill-deleting.php">Delete Bill</a></li>
+                <li><a href="bill-deleting.php">Remove Bill</a></li>
                 <li><a href="Billsending.php">Bill Sending Form</a></li>
                 <li><a href="employee.php">Back</a></li>
             </ul>

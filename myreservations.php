@@ -45,7 +45,7 @@
         td{
     font-weight: 800; /* Makes the th font double bold */
     font-family: Arial, sans-serif; /* Example font family */
-    color: #f4ff81
+    color: #ef6c00
         }
         th {
             background-color: #f2f2f2;
@@ -85,8 +85,8 @@ header{
             header{
                 min-height: 500px;
             }
-            
         }
+        
     </style>
 </head>
 <body>

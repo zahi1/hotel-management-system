@@ -9,13 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if the username exists in any of the tables based on id_User
     $sql = "(SELECT 'admin' AS role, id_User,email FROM Administrators WHERE id_User = 
-                (SELECT id_User FROM Users WHERE Login = '$username'))
+                (SELECT id_User FROM Users WHERE Login = '$username' AND Password = '$password'))
              UNION
              (SELECT 'customer' AS role, id_User,email_address AS email FROM Customers WHERE id_User = 
-                (SELECT id_User FROM Users WHERE Login = '$username'))
+                (SELECT id_User FROM Users WHERE Login = '$username' AND Password = '$password'))
              UNION
              (SELECT 'employee' AS role, id_User,contact_information AS email FROM Employees WHERE id_User = 
-                (SELECT id_User FROM Users WHERE Login = '$username'))";
+                (SELECT id_User FROM Users WHERE Login = '$username'    AND Password = '$password'))";
     
     $result = $conn->query($sql);
 
