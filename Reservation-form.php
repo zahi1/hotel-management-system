@@ -87,6 +87,9 @@ if ($result && $result->num_rows > 0) {
             </tr>
         <?php endforeach; ?>
     </table>
-    <a href="employee.php">Back</a>
+   
+    <form action="employee.php">
+        <button type="submit">Back</button>
+    </form>
 </body>
 </html>
