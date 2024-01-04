@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['send'])) {
         $mail = new PHPMailer(true);
         $bill_id = $_POST['bill_id'];
+        $email = $_POST['email'];
+
         $sql = "SELECT * FROM bills WHERE id_Bill = '$bill_id'";
         $result = $conn->query($sql);
 
@@ -24,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Recipient
             $to = 'vimalrajvarunjosh@gmail.com'; // Customer's email address
             $mail->setFrom('hms2024KTU@gmail.com', 'HMS'); // Sender's email and name
-            $mail->addAddress($to);
+            $mail->addAddress($email);
 
             // Email content
             $mail->isHTML(false); // Set to true if using HTML content
@@ -40,9 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Send email
             if ($mail->send()) {
-                echo "Email sent successfully to $to";
+                echo "Email sent successfully to $email";
             } else {
-                echo "Failed to send email to $to. Error: {$mail->ErrorInfo}";
+                echo "Failed to send email to $email. Error: {$mail->ErrorInfo}";
             }
         } catch (Exception $e) {
             echo "Mailer Error: {$mail->ErrorInfo}";
@@ -121,6 +123,7 @@ header {
                         // Add a Send button for each row
                         echo "<td><form action='' method='post'>"; // Assuming send_bill.php is where you handle the 'Send' action
                         echo "<input type='hidden' name='bill_id' value='" . $row["id_Bill"] . "'>"; // Passing the bill_id as a hidden input
+                        echo "<input type='hidden' name='email' value='" . $row["email_address"] . "'>";
                         echo "<button class='btn waves-effect waves-light' type='submit' name='send'>Send</button>"; // Materialize Send button
                         echo "</form></td>";
                         

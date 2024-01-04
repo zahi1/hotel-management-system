@@ -114,7 +114,6 @@ header{
          </div>
         </nav>
     <div class="reservation-list">
-        <a href="customer.php">Go Back</a>
         <?php
         session_start();
         include 'db.php'; // Include your database connection
@@ -199,7 +198,7 @@ header{
                 }
                 echo "</table>";
             } else {
-                echo "<p>No reservations found.</p>";
+                echo "<h4 style='color: red;'>No reservations found.</h4    >";
             }
         } else {
             echo "<p>Please log in to view your reservations.</p>";
