@@ -63,9 +63,11 @@
     echo 'Room Number: <input type="text" name="room_number" required><br>';
     echo 'Type: <input type="text" name="type" required><br>';
     echo 'Price: <input type="text" name="price" required><br>';
+
     echo 'Size: <input type="text" name="size" required><br>';
     echo 'Maximum Occupancy: <input type="text" name="maximum_occupancy" required><br>';
     echo 'Room View: <input type="text" name="room_view" required><br>';
+    echo 'Image:<input type="text" name="image" required><br>';
     echo 'Air Conditioning: <input type="text" name="air_conditioning" required><br>';
     echo 'Coffee Maker: <input type="text" name="coffee_maker" required><br>';
     echo 'Status: <input type="text" name="status" required><br>';
@@ -115,6 +117,7 @@ if (isset($_POST['addRoom'])) {
     $type = $_POST['type'];
     $price = $_POST['price'];
     $size = $_POST['size'];
+    $image = $_POST['image'];
     $maximum_occupancy = $_POST['maximum_occupancy'];
     $room_view = $_POST['room_view'];
     $air_conditioning = $_POST['air_conditioning'];
@@ -126,7 +129,8 @@ if (isset($_POST['addRoom'])) {
         $admin_id = $_SESSION['user_id'];
 
         // Insert the new room record using the admin_id from the session
-        $addQuery = "INSERT INTO rooms (fk_Administratorid_User, start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status) VALUES ('$admin_id', '$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status')";
+        $addQuery = "INSERT INTO rooms (fk_Administratorid_User, start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status,image) 
+        VALUES ('$admin_id', '$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status','$image')";
         
         // Execute the SQL query
         if ($conn->query($addQuery) === TRUE) {
@@ -167,8 +171,6 @@ if (isset($_POST['addRoom'])) {
 }
 }
 }
-
-// ... rest of your PHP code ...
 
     }
     

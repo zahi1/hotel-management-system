@@ -50,11 +50,6 @@ if (isset($_POST['similar'])) {
         } else {
             echo "<p>Error canceling reservation: " . $conn->error . "</p>";
         }
-        // if (mysqli_stmt_execute($stmt)) {
-        //     echo "Room removed successfully.";
-        // } else {
-        //     echo "Error: " . mysqli_error($conn);
-        // }
       
     }
     
@@ -71,16 +66,7 @@ if (isset($_POST['similar'])) {
         } else {
             echo "<p>Error canceling reservation: " . $conn->error . "</p>";
         }
-        // if (mysqli_stmt_execute($stmt)) {
-        //     echo "Room unassigned successfully.";
-        // } else {
-        //     echo "Error: " . mysqli_error($conn);
-        // }
     }
-    
-   // $selectedRoom = isset($_POST['selectedRoom']) ? $_POST['selectedRoom'] : '';
-
-
     ?>
 
 
