@@ -5,6 +5,58 @@
     <title>My Reservations</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.reservation-list {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.reservations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.reservations-table th, .reservations-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.reservations-table th {
+    background-color: #f2f2f2;
+}
+
+.reservations-table img {
+    display: block;
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.edit-btn, .cancel-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    width: 80px;
+    margin: 0 auto;
+}
+
+.edit-btn:hover, .cancel-btn:hover {
+    background-color: #d32f2f;
+}
+
         table {
             border-collapse: collapse;
             width: 100%;
@@ -28,6 +80,13 @@
         .cancel-btn:hover {
             background-color: #d32f2f;
         }
+        img {
+    display: block; /* Ensures margin auto works properly */
+    width: 50%; /* Adjust the width as needed */
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
     </style>
 </head>
 <body>
@@ -56,7 +115,8 @@
             }
             
             // Query reservations for the logged-in user including room type
-            $sql = "SELECT Reservations.id_Reservation, Reservations.check_in_date, Reservations.check_out_date, Rooms.room_number, Rooms.type, Reservations.requested_service
+            $sql = "SELECT Reservations.id_Reservation, Reservations.check_in_date, Reservations.check_out_date, 
+            Rooms.image,Rooms.room_number, Rooms.type, Reservations.requested_service
                     FROM Reservations
                     INNER JOIN Rooms ON Reservations.fk_Roomroom_number = Rooms.room_number
                     WHERE Reservations.fk_Customerid_User = '$user_id'";
@@ -69,7 +129,7 @@
                         <th>Reservation ID</th>
                         <th>Check-In Date</th>
                         <th>Check-Out Date</th>
-                        <th>Room Number</th>
+                        <th></th>
                         <th>Room Type</th>
                         <th>Requested Service</th>
                         <th>Action</th>
@@ -79,16 +139,48 @@
                     echo "<td>" . $row['id_Reservation'] . "</td>";
                     echo "<td>" . $row['check_in_date'] . "</td>";
                     echo "<td>" . $row['check_out_date'] . "</td>";
-                    echo "<td>" . $row['room_number'] . "</td>";
+                    echo "<td><img src='imgs/" . $row['image'] . "' alt='" . $row['image'] . "'></td>";
+                   // echo "<td>" . $row['room_number'] . "</td>";
                     echo "<td>" . $row['type'] . "</td>";
-                    echo "<td>" . $row['requested_service'] . "</td>";
-                    echo "<td>";
+                    //echo "<td>" . $row['requested_service']  . "</td>";
+                    if (isset($_POST['edit_service'])) {
+                        $reservation_id = $_POST['reservation_id'];
+                        $selected_service = $_POST['requested_service'];
+                
+                        // Update the requested_service field in the Reservations table
+                        $update_service_sql = "UPDATE Reservations SET requested_service = '$selected_service' WHERE id_Reservation = '$reservation_id'";
+                        
+                        if ($conn->query($update_service_sql) === TRUE) {
+                            echo "<p>Service updated successfully.</p>";
+                        header("Refresh:1;url=myreservations.php");
+                        } else {
+                            echo "<p>Error updating service: " . $conn->error . "</p>";
+                        }
+                    }
+                    $services = array('car service', 'extra bed', 'room clean');
+                    echo "<td>" ;
                     echo "<form method='POST'>";
                     echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
-                    echo "<input type='submit' class='cancel-btn' name='cancel_reservation' value='Cancel'>";
-                    echo "</form>";
+                    echo "<select name='requested_service'>";
+                    echo "<option value=''>Select service</option>";
+                    foreach ($services as $service) {
+                        echo "<option value='$service'";
+                        if ($row['requested_service'] === $service) {
+                            echo " selected";
+                        }
+                        echo ">$service</option>";
+                    }
+                    echo "</select><br>";
+                    echo "<br>";
+                    echo "<input type='submit' class='edit-btn' name='edit_service' value='Request'>";
+                    echo "</form>"; 
                     echo "</td>";
-                    echo "<td>";
+                    echo "<td>";    
+                    echo '<form method="POST" onsubmit="return confirm(\'Are you sure you want to cancel this reservation?\');">';
+
+                    echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
+                    echo "<input type='submit' class='cancel-btn' name='cancel_reservation' value='Cancel'>";
+                    echo "</form><br>";  
                     echo "<form method='POST' action='reservationdetails.php'>";
                     echo "<input type='hidden' name='reservation_id' value='" . $row['id_Reservation'] . "'>";
                     echo "<input type='submit' class='edit-btn' name='edit_reservation' value='Edit'>";

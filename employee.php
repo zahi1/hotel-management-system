@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-$username =  $_SESSION['user_id'];
-echo 'Hello, ' . $username . '!';
+$userid =  $_SESSION['user_id'];
+$username=$_SESSION['username'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,12 +11,12 @@ echo 'Hello, ' . $username . '!';
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Welcome, Employee!</h2>
+    <h2>Welcome, <?php echo $username;?>!</h2>
     <ul>
         <li><a href="Bill-form.php">Bill Form</a></li>
         <li><a href="Customer-requests-page.php">Customer Requests</a></li>
         <li><a href="Reservation-form.php">Reservation Form</a></li>
-        <li><a href="Report.php">Report</a></li>
+        <li><a href="Report-form.php">Report</a></li>
     </ul>
     <form action="logout.php" method="post" class="logout-form">
         <button type="submit">Logout</button>

@@ -1,4 +1,9 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor1/autoload.php';
+
+
 session_start();
 include 'db.php'; // Include your database connection
 
@@ -21,7 +26,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_reservation'])
         $update_room_status_sql = "UPDATE Rooms SET status = 'booked' WHERE room_number = '$selected_room_number'";
         
         if ($conn->query($update_room_status_sql) === TRUE) {
-            echo "Room reserved successfully!";
+            // Create a PHPMailer instance
+            $mail = new PHPMailer(true);
+
+            try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; // SMTP server
+                $mail->SMTPAuth = true;
+                $mail->Username = 'hms2024KTU@gmail.com'; // SMTP username
+                $mail->Password = 'eafn vdab zcpl ergc'; 
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
+
+                // Recipient
+                $to = 'vimalrajvarunjosh@gmail.com'; 
+                $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); 
+                $mail->addAddress($to);
+
+                // Email content
+                $mail->isHTML(false); 
+                $mail->Subject = 'Reservation Confirmation';
+                $mail->Body = 'Dear Customer, Your reservation has been confirmed.';
+
+                // Send email
+                if ($mail->send()) {
+                    //echo "Email sent successfully to $to";
+                } else {
+                    echo "Failed to send email to $to. Error: {$mail->ErrorInfo}";
+                }
+            } catch (Exception $e) {
+                echo "Mailer Error: {$mail->ErrorInfo}";
+            }
+            header("Location: myreservations.php");
         } else {
             echo "Error updating room status: " . $conn->error;
         }

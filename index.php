@@ -5,6 +5,7 @@ include 'db.php'; // Database connection file
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $_SESSION['username'] =$username;
 
     // Check if the username exists in any of the tables based on id_User
     $sql = "(SELECT 'admin' AS role, id_User FROM Administrators WHERE id_User = 
@@ -26,12 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         switch ($_SESSION['role']) {
             case 'admin':
+                sleep(1);
                 header("Location: admin.php");
                 break;
             case 'customer':
+                sleep(1);
                 header("Location: customer.php");
                 break;
             case 'employee':
+                sleep(1);
                 header("Location: employee.php");
                 break;
             default:

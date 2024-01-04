@@ -5,8 +5,12 @@ $userid = $_SESSION['user_id'];
 
 include 'db.php'; // Database connection file
 
-// Fetch all bills from the database
-$sql = "SELECT * FROM Bills";
+// Fetch unpaid bills from the database with customer information
+$sql = "SELECT b.id_Bill, b.date_generated, b.bill_amount, c.id_User AS customer_id, CONCAT(c.id_User, '-', c.firstname) AS customer_name, b.fk_Employeeid_User
+        FROM Bills b 
+        INNER JOIN Customers c ON b.customer_id = c.id_User
+        WHERE b.status = 'unpaid'"; // Condition added to fetch only unpaid bills
+
 $result = $conn->query($sql);
 
 $billsData = [];
@@ -15,8 +19,8 @@ if ($result && $result->num_rows > 0) {
         $billsData[] = $row;
     }
 } else {
-    echo "No bills found.";
-    exit; // Exit if no bills are found
+    echo "No Bills to edit!";
+    exit; // Exit if no unpaid bills are found
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['date_generated'], $_POST['bill_amount'])) {
@@ -31,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
     $update_sql = "UPDATE Bills 
                     SET date_generated = '$updated_date_generated', 
                         bill_amount = '$updated_bill_amount'
-                    WHERE id_Bill = $updated_bill_id";
+                    WHERE id_Bill = $updated_bill_id AND fk_Employeeid_User = $userid";
 
     if ($conn->query($update_sql) === TRUE) {
         header("Location: Bill-form.php");
@@ -41,25 +45,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Bills</title>
+    <title>Edit Unpaid Bills</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h2>Edit Bills</h2>
+    <h2>Edit Unpaid Bills</h2>
     <table>
         <tr>
             <th>Bill ID</th>
             <th>Date Generated</th>
             <th>Bill Amount</th>
+            <th>Customer Details</th>
             <th>Modify</th>
         </tr>
         <?php foreach ($billsData as $bill): ?>
             <tr>
-                <form action="bill-editing.php" method="post">
+                <form action="bill-editing.php" method="post" onsubmit="return confirm('Are you sure you want to update this bill?')">
                     <td><?php echo $bill['id_Bill']; ?></td>
                     <td>
                         <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
@@ -67,6 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
                     </td>
                     <td>
                         <input type="text" name="bill_amount" value="<?php echo $bill['bill_amount']; ?>" required>
+                    </td>
+                    <td>
+                        <input type="hidden" name="customer_id" value="<?php echo $bill['customer_id']; ?>">
+                        <span>ID: <?php echo $bill['customer_id']; ?></span><br>
+                        <span>Name: <?php echo substr($bill['customer_name'], strpos($bill['customer_name'], '-') + 1); ?></span>
                     </td>
                     <td>
                         <?php if ($userid == $bill['fk_Employeeid_User']): ?>
@@ -80,6 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
         <?php endforeach; ?>
     </table>
 
-    <a href="Bill-form.php">Back to Bill form</a>
+    <form action="Bill-form.php">
+        <button type="submit">Back</button>
+    </form>
 </body>
 </html>
