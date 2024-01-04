@@ -107,6 +107,8 @@ if (!$result) {
 <body>
 
 <h2>Employee List</h2>
+<a href="admin.php"><button>Admin HomePage</button></a>
+
 
 <table border="1">
     <tr>

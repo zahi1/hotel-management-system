@@ -103,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h2>Add Employee</h2>
+    <a href="admin.php"><button>Admin HomePage</button></a>
 
     <!-- Display success message if indicated by URL parameter -->
     <?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
