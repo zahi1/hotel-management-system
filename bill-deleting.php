@@ -46,12 +46,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Delete Unpaid Bills</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <style>
+        header {
+            background-size: cover;
+            background-position: center;
+            min-height: 1000px;
+        }
+        .image-with-text {
+            display: flex!important;
+            flex-direction: column;
+            align-items: center;
+        }
+        @media screen and (max-width:670px) {
+            header {
+                min-height: 500px;
+            }
+        }
+    </style>
     <script>
         function confirmDelete(billId) {
             if (confirm("Are you sure you want to delete this bill?")) {
@@ -63,42 +82,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'])) {
     </script>
 </head>
 <body>
-    <h2>Delete Unpaid Bills</h2>
-    <table>
-        <tr>
-            <th>Bill ID</th>
-            <th>Date Generated</th>
-            <th>Bill Amount</th>
-            <th>Customer Details</th>
-            <th>Delete</th>
-        </tr>
-        <?php foreach ($billsData as $bill): ?>
-            <tr>
-                <form id="deleteForm_<?php echo $bill['id_Bill']; ?>" action="bill-deleting.php" method="post">
-                    <td><?php echo $bill['id_Bill']; ?></td>
-                    <td><?php echo $bill['date_generated']; ?></td>
-                    <td><?php echo $bill['bill_amount']; ?></td>
-                    <td>
-                        <input type="hidden" name="customer_id" value="<?php echo $bill['customer_id']; ?>">
-                        <span>ID: <?php echo $bill['customer_id']; ?></span><br>
-                        <span>Name: <?php echo substr($bill['customer_name'], strpos($bill['customer_name'], '-') + 1); ?></span>
-                    </td>
-                    <td>
-                        <?php if ($userid == $bill['fk_Employeeid_User']): ?>
-                            <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
-                            <input type="hidden" name="confirmed" value="false">
-                            <button type="button" onclick="confirmDelete(<?php echo $bill['id_Bill']; ?>)">Delete</button>
-                        <?php else: ?>
-                            Not authorized
-                        <?php endif; ?>
-                    </td>
-                </form>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="employee.php" class="brand-logo">Employee</a>
+            </div>
+        </nav>
 
-    <form action="Bill-form.php">
-        <button type="submit">Back</button>
-    </form>
+        <div class="container">
+            <h2>Remove Unpaid Bills</h2>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Bill ID</th>
+                        <th>Date Generated</th>
+                        <th>Bill Amount</th>
+                        <th>Customer Details</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($billsData as $bill): ?>
+                        <tr>
+                            <form id="deleteForm_<?php echo $bill['id_Bill']; ?>" action="bill-deleting.php" method="post">
+                                <td><?php echo $bill['id_Bill']; ?></td>
+                                <td><?php echo $bill['date_generated']; ?></td>
+                                <td><?php echo $bill['bill_amount']; ?></td>
+                                <td>
+                                    <input type="hidden" name="customer_id" value="<?php echo $bill['customer_id']; ?>">
+                                    <span>ID: <?php echo $bill['customer_id']; ?></span><br>
+                                    <span>Name: <?php echo substr($bill['customer_name'], strpos($bill['customer_name'], '-') + 1); ?></span>
+                                </td>
+                                <td>
+                                    <?php if ($userid == $bill['fk_Employeeid_User']): ?>
+                                        <input type="hidden" name="bill_id" value="<?php echo $bill['id_Bill']; ?>">
+                                        <input type="hidden" name="confirmed" value="false">
+                                        <button type="button" onclick="confirmDelete(<?php echo $bill['id_Bill']; ?>)" class="btn red">Remove</button>
+                                    <?php else: ?>
+                                        <span>Not authorized</span>
+                                    <?php endif; ?>
+                                </td>
+                            </form>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <form action="Bill-form.php">
+                <button type="submit" class="btn">Back</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 </body>
 </html>
