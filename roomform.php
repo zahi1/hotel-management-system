@@ -1,9 +1,89 @@
+roomform.php
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Rooms Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="date"] {
+            padding: 8px;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Add more styles as needed */
+    </style>
 </head>
 <body>
     <h1>Manage Rooms</h1>
@@ -30,7 +110,7 @@
         echo '<tr><th>Room Number</th><th>Type</th><th>Price</th><th>Size</th><th>Maximum Occupancy</th><th>Room View</th><th>Air Conditioning</th><th>Coffee Maker</th><th>Status</th><th>Action</th></tr>';
 
         while($row = $result->fetch_assoc()) {
-            echo '<form method="post" action="">';
+            echo '<form method="post" action="roomedit.php">';
             echo '<tr>';
             echo '<td>'.$row['room_number'].'</td>';
             echo '<td><input type="text" name="type" value="'.$row['type'].'" required></td>';
@@ -58,7 +138,7 @@
     echo '<button onclick="showAddRoomForm()">Add Room</button>';
     echo '<div id="addRoomForm" style="display:none;">';
     echo '<h2>Add Room</h2>';
-    echo '<form method="post" action="">';
+    echo '<form method="post" action="roomedit.php">';
     echo 'Start Date: <input type="date" name="start_date" required><br>';
     echo 'Room Number: <input type="text" name="room_number" required><br>';
     echo 'Type: <input type="text" name="type" required><br>';
@@ -74,76 +154,7 @@
     echo '</form>';
     echo '</div>';
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (isset($_POST['edit'])) {
-            $room_number = $_POST['room_number'];
-            $type = $_POST['type'];
-            $price = $_POST['price'];
-            $size = $_POST['size'];
-            $maximum_occupancy = $_POST['maximum_occupancy'];
-            $room_view = $_POST['room_view'];
-            $air_conditioning = $_POST['air_conditioning'];
-            $coffee_maker = $_POST['coffee_maker'];
-            $status = $_POST['status'];
     
-            $updateQuery = "UPDATE rooms SET type='$type', price='$price', size='$size', maximum_occupancy='$maximum_occupancy', room_view='$room_view', air_conditioning='$air_conditioning', coffee_maker='$coffee_maker', status='$status' WHERE room_number='$room_number'";
-            
-            if ($conn->query($updateQuery) === TRUE) {
-                header("Location: {$_SERVER['PHP_SELF']}");
-                exit();
-            } else {
-                echo "Error updating room: " . $conn->error;
-            }
-        }
-    
-        if (isset($_POST['delete'])) {
-            $room_numberToDelete = $_POST['room_number'];
-            $deleteQuery = "DELETE FROM rooms WHERE room_number = '$room_numberToDelete'";
-            
-            if ($conn->query($deleteQuery) === TRUE) {
-                header("Location: {$_SERVER['PHP_SELF']}");
-                exit();
-            } else {
-                echo "Error deleting room: " . $conn->error;
-            }
-        }
-
-        // ... other parts of your code ...
-
-if (isset($_POST['addRoom'])) {
-    $start_date = $_POST['start_date'];
-    $room_number = $_POST['room_number'];
-    $type = $_POST['type'];
-    $price = $_POST['price'];
-    $size = $_POST['size'];
-    $maximum_occupancy = $_POST['maximum_occupancy'];
-    $room_view = $_POST['room_view'];
-    $air_conditioning = $_POST['air_conditioning'];
-    $coffee_maker = $_POST['coffee_maker'];
-    $status = $_POST['status'];
-    $image = $_POST['image'];
-
-    // Retrieve admin_id from the session
-    if (isset($_SESSION['user_id'])) {
-        $admin_id = $_SESSION['user_id'];
-
-        // Insert the new room record using the admin_id from the session
-        $addQuery = "INSERT INTO rooms (fk_Administratorid_User, start_date, room_number, type, price, size, maximum_occupancy, room_view, air_conditioning, coffee_maker, status,image) 
-        VALUES ('$admin_id', '$start_date', '$room_number', '$type', '$price', '$size', '$maximum_occupancy', '$room_view', '$air_conditioning', '$coffee_maker', '$status','$image')";
-        
-        // Execute the SQL query
-        if ($conn->query($addQuery) === TRUE) {
-            echo "New room added successfully.";
-            refreshPage();
-        } else {
-            echo "Error adding room: " . $conn->error;
-        }
-}
-}
-
-// ... rest of your PHP code ...
-
-    }
     
     $conn->close();
     ?>

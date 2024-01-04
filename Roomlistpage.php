@@ -45,7 +45,7 @@ if (isset($_POST['similar'])) {
         //$stmt = mysqli_prepare($conn, $deleteQuery);
         //mysqli_stmt_bind_param($stmt, 's', $selectedRoomNumber);
         if ($conn->query($deleteQuery) === TRUE) {
-            echo "<p>Reservation canceled successfully.</p>";
+            echo "<p>Room removed successfully.</p>";
             refreshPage();
         } else {
             echo "<p>Error canceling reservation: " . $conn->error . "</p>";
@@ -59,7 +59,7 @@ if (isset($_POST['similar'])) {
         echo "$selectedRoomNumber";
         $updateStatusQuery = "UPDATE rooms SET status = 'available' WHERE room_number ='$selectedRoomNumber'";
         if ($conn->query($updateStatusQuery) === TRUE) {
-            echo "<p>Reservation canceled successfully.</p>";
+            echo "<p>Unassigned successfully.</p>";
             refreshPage();
 
 
@@ -75,8 +75,64 @@ if (isset($_POST['similar'])) {
 <html lang="en">
 <head>
     
+    
     <meta charset="UTF-8">
     <title>Select Room</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button, input[type="submit"], input[type="button"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover, input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            color: red;
+        }
+
+        /* Add more styles as needed */
+    </style>
 </head>
 <body>
     <h1>Select Room</h1>
