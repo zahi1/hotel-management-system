@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <header>
     <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper blue-grey darken-4">
             <a href="employee.php" class="brand-logo">Employee</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="bill-editing.php">Edit Bill</a></li>

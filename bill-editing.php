@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bill_id'], $_POST['da
 <body>
     <header>
         <nav>
-            <div class="nav-wrapper">
+            <div class="nav-wrapper blue-grey darken-4">
                 <a href="employee.php" class="brand-logo">Employee</a>
             </div>
         </nav>

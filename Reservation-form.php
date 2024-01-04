@@ -71,7 +71,7 @@ if ($result && $result->num_rows > 0) {
 <body>
 
     <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper blue-grey darken-4">
             <a href="employee.php" class="brand-logo">Employee</a>
            
         </div>
