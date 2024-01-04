@@ -18,24 +18,28 @@
 <body>
     <h2>Register</h2>
     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post" class="centre">
+    <label for="username">Firstname(Username):</label>
     <div class="input-field col s12">
-        <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
         </div>
+        <label for="lastname">Lastname:</label>
         <div class="input-field col s12">
+        <input type="text" id="lastname" name="lastname" required><br><br>
+        </div>
         <label for="password">Password:</label>
+        <div class="input-field col s12">
         <input type="password" id="password" name="password" required><br><br>
         </div>
-        <div class="input-field col s12">
         <label for="email">Email:</label>
+        <div class="input-field col s12">
         <input type="email" id="email" name="email" required><br><br>
         </div>
-        <div class="input-field col s12">
         <label for="phone_number">Phone Number:</label>
+        <div class="input-field col s12">
         <input type="text" id="phone_number" name="phone_number" required><br><br>
         </div>
-        <div class="input-field col s12">
         <label for="billing_address">Billing Address:</label>
+        <div class="input-field col s12">
         <input type="text" id="billing_address" name="billing_address" required><br><br>
         </div>
         <input type="submit" class="waves-effect waves-light btn" value="Register">
@@ -55,6 +59,7 @@
         $email = $_POST['email'];
         $phone_number = $_POST['phone_number'];
         $billing_address = $_POST['billing_address'];
+        $lastname = $_POST['lastname'];
 
         // Hash the password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);

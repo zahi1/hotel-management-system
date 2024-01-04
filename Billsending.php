@@ -23,12 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Recipient
             $to = 'vimalrajvarunjosh@gmail.com'; // Customer's email address
-            $mail->setFrom('hms2024KTU@gmail.com', 'Your Name'); // Sender's email and name
+            $mail->setFrom('hms2024KTU@gmail.com', 'HMS'); // Sender's email and name
             $mail->addAddress($to);
 
             // Email content
             $mail->isHTML(false); // Set to true if using HTML content
-            $mail->Subject = 'Reservation Confirmation';
+            $mail->Subject = 'Bill Details';
 
             // Fetch data from the query
             $row = $result->fetch_assoc();
@@ -51,60 +51,92 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Bills List</title>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+header {
+            background-size: cover;
+            background-position: center;
+            min-height: 1000px;
+        }
+        .image-with-text {
+            display: flex!important;
+            flex-direction: column;
+            align-items: center;
+        }
+        @media screen and (max-width:670px) {
+            header {
+                min-height: 500px;
+            }
+        }    </style>
 </head>
 <body>
+    <header>
+    <nav>
+        <div class="nav-wrapper blue-grey darken-4">
+            <a href="employee.php" class="brand-logo">Employee</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="employee.php">Back</a></li>
+            </ul>
+        </div>
+    </nav>
+        <h1>Bills List</h1>
 
-<h1>Bills List</h1>
 
-<table border="1">
-    <tr>
-        <th>Bill ID</th>
-        <th>Bill Amount</th>
-        <th>Date Generated</th>
-        <th>Customer Name</th>
-        <th>Email Address</th>
-        <th>Action</th> <!-- New header for the Action column -->
-    </tr>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Bill ID</th>
+                    <th>Bill Amount</th>
+                    <th>Date Generated</th>
+                    <th>Customer Name</th>
+                    <th>Email Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                include 'db.php'; // Include the database connection file
 
-    <?php
-    include 'db.php'; // Include the database connection file
+                // SQL query to join the bills and customers tables
+                $sql = "SELECT b.id_Bill, b.bill_amount, b.date_generated, CONCAT(c.firstname, ' ', c.lastname) AS customer_name, c.email_address
+                        FROM bills AS b
+                        JOIN customers AS c ON b.customer_id = c.id_User";
 
-    // SQL query to join the bills and customers tables
-    $sql = "SELECT b.id_Bill, b.bill_amount, b.date_generated, CONCAT(c.firstname, ' ', c.lastname) AS customer_name, c.email_address
-            FROM bills AS b
-            JOIN customers AS c ON b.customer_id = c.id_User";
+                $result = $conn->query($sql);
 
-    $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row["id_Bill"] . "</td>";
+                        echo "<td>" . $row["bill_amount"] . "</td>";
+                        echo "<td>" . $row["date_generated"] . "</td>";
+                        echo "<td>" . $row["customer_name"] . "</td>";
+                        echo "<td>" . $row["email_address"] . "</td>";
+                        
+                        // Add a Send button for each row
+                        echo "<td><form action='' method='post'>"; // Assuming send_bill.php is where you handle the 'Send' action
+                        echo "<input type='hidden' name='bill_id' value='" . $row["id_Bill"] . "'>"; // Passing the bill_id as a hidden input
+                        echo "<button class='btn waves-effect waves-light' type='submit' name='send'>Send</button>"; // Materialize Send button
+                        echo "</form></td>";
+                        
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6'>No records found</td></tr>";
+                }
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $row["id_Bill"] . "</td>";
-            echo "<td>" . $row["bill_amount"] . "</td>";
-            echo "<td>" . $row["date_generated"] . "</td>";
-            echo "<td>" . $row["customer_name"] . "</td>";
-            echo "<td>" . $row["email_address"] . "</td>";
-            
-            // Add a Send button for each row
-            echo "<td><form action='' method='post'>"; // Assuming send_bill.php is where you handle the 'Send' action
-            echo "<input type='hidden' name='bill_id' value='" . $row["id_Bill"] . "'>"; // Passing the bill_id as a hidden input
-            echo "<input type='submit' name='send' value='Send'>"; // Send button
-            echo "</form></td>";
-            
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='6'>No records found</td></tr>";
-    }
+                $conn->close(); // Close the database connection
+                ?>
+            </tbody>
+        </table>
 
-    $conn->close(); // Close the database connection
-    ?>
-</table>
-
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+            </header>
 </body>
 </html>
