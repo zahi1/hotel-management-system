@@ -3,8 +3,8 @@ session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-//require 'vendor1/autoload.php';
-require 'C:\Windows\System32\vendor\autoload.php';
+require 'vendor1/autoload.php';
+//require 'C:\Windows\System32\vendor\autoload.php';
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
