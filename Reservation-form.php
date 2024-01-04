@@ -47,46 +47,80 @@ if ($result && $result->num_rows > 0) {
 <html>
 <head>
     <title>Reservation Details</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Include Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        header {
+            background-size: cover;
+            background-position: center;
+            min-height: 1000px;
+        }
+        .image-with-text {
+            display: flex!important;
+            flex-direction: column;
+            align-items: center;
+        }
+        @media screen and (max-width:670px) {
+            header {
+                min-height: 500px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h2>Reservation Details</h2>
-    <table>
-        <tr>
-            <th>Room Number</th>
-            <th>Customer ID</th>
-            <th>Customer Full Name</th>
-            <th>Reservation from</th>
-            <th>Reservation till</th>
-            <th>Status</th>
-            <th>Modify</th>
-        </tr>
-        <?php foreach ($reservationData as $reservation): ?>
-            <tr>
-                <form action="Reservation-form.php" method="post">
-                    <td><?php echo $reservation['fk_Roomroom_number']; ?></td>
-                    <td><?php echo $reservation['fk_Customerid_User']; ?></td>
-                    <td><?php echo $reservation['firstname'] . ' ' . $reservation['lastname']; ?></td>
-                    <td><?php echo $reservation['check_in_date']; ?></td>
-                    <td><?php echo $reservation['check_out_date']; ?></td>
-                    <td>
-                        <input type="hidden" name="reservation_id" value="<?php echo $reservation['id_Reservation']; ?>">
-                        <select name="status" required>
-                            <option value="pending" <?php if ($reservation['status'] === 'pending') echo 'selected'; ?>>Pending</option>
-                            <option value="checked-in" <?php if ($reservation['status'] === 'checked-in') echo 'selected'; ?>>Checked-in</option>
-                            <option value="checked-out" <?php if ($reservation['status'] === 'checked-out') echo 'selected'; ?>>Checked-out</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="submit" value="Update">
-                    </td>
-                </form>
-            </tr>
-        <?php endforeach; ?>
-    </table>
-   
-    <form action="employee.php">
-        <button type="submit">Back</button>
-    </form>
+
+    <nav>
+        <div class="nav-wrapper">
+            <a href="employee.php" class="brand-logo">Employee</a>
+           
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Reservation Details</h2>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Customer ID</th>
+                    <th>Customer Full Name</th>
+                    <th>Reservation from</th>
+                    <th>Reservation till</th>
+                    <th>Status</th>
+                    <th>Modify</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($reservationData as $reservation): ?>
+                    <tr>
+                        <td><?php echo $reservation['fk_Roomroom_number']; ?></td>
+                        <td><?php echo $reservation['fk_Customerid_User']; ?></td>
+                        <td><?php echo $reservation['firstname'] . ' ' . $reservation['lastname']; ?></td>
+                        <td><?php echo $reservation['check_in_date']; ?></td>
+                        <td><?php echo $reservation['check_out_date']; ?></td>
+                        <td>
+                            <form action="Reservation-form.php" method="post">
+                                <input type="hidden" name="reservation_id" value="<?php echo $reservation['id_Reservation']; ?>">
+                                <select class="browser-default" name="status" required>
+                                    <option value="pending" <?php if ($reservation['status'] === 'pending') echo 'selected'; ?>>Pending</option>
+                                    <option value="checked-in" <?php if ($reservation['status'] === 'checked-in') echo 'selected'; ?>>Checked-in</option>
+                                    <option value="checked-out" <?php if ($reservation['status'] === 'checked-out') echo 'selected'; ?>>Checked-out</option>
+                                </select>
+                        </td>
+                        <td>
+                                <button class="btn waves-effect waves-light" type="submit" name="action">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <form action="employee.php">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Back</button>
+        </form>
+    </div>
+
+    <!-- Include Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
