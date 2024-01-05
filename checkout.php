@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . "/vendor/autoload.php";
-$stripe_secret_key = "sk_test_51OUVzPAhtWpxM4JlJX6xJnpDizAxGAZidhGMmXotycakHilraxRWymDfCZ2mKwTZnaMBRCd7koKRhMV9NlXTCbNy009yofARkD";
+$stripe_secret_key = "PRIVATE_KEY";
 
 \Stripe\Stripe::setApiKey($stripe_secret_key);
 
