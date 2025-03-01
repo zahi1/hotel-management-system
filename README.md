@@ -99,7 +99,3 @@ Contributions are welcome! Fork the repository and submit a pull request.
 
 This project is licensed under the MIT License.
 
-## Contact
-
-For any inquiries, please reach out to Zahi El Helou at elhelouzahi@gmail.com.
-
